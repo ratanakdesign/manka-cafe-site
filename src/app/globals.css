@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-cream: #FFF8F0;
+    --color-blush: #F5C6C6;
+    --color-matcha: #8DB580;
+    --color-brown: #6B4226;
+    --color-charcoal: #3A3A3A;
+    --color-gold: #E8C872;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream text-charcoal font-body;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+
+  /* Safe area inset for mobile sticky bar */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-brown text-cream font-semibold px-5 py-3 rounded-2xl hover:bg-brown/90 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-matcha text-white font-semibold px-5 py-3 rounded-2xl hover:bg-matcha/90 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-matcha focus-visible:ring-offset-2 active:scale-95;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-brown text-brown font-semibold px-5 py-3 rounded-2xl hover:bg-blush/30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 text-brown font-semibold px-5 py-3 rounded-2xl hover:bg-blush/30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl overflow-hidden shadow-sm border border-blush/30;
+  }
+
+  .section-title {
+    @apply font-display font-bold text-brown;
+  }
+
+  .tag {
+    @apply inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-blush/60 text-brown;
+  }
+
+  .tag-green {
+    @apply inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-800;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-3 rounded-2xl border border-blush bg-white text-charcoal placeholder-charcoal/40 focus:outline-none focus:ring-2 focus:ring-brown/30 focus:border-brown transition-colors text-sm;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-charcoal mb-1.5;
+  }
+
+  .page-hero {
+    @apply pt-28 pb-16 sm:pt-32 sm:pb-20;
+  }
+}
