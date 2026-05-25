@@ -5,9 +5,9 @@ import { FAQS } from '@/data/faqs'
 import FAQClient from './FAQClient'
 
 export const metadata: Metadata = {
-  title: 'FAQ | Location, Menu, Latte Art & Bookings',
+  title: 'FAQ | Manka Cafe Sunnybank',
   description:
-    'Answers to the most common questions about Manka Cafe — where we are, what we serve, how custom latte art works, opening hours and how to book a private event.',
+    'Common questions about Manka Cafe — where to find us, how latte art works, opening hours, delivery and gatherings.',
   alternates: { canonical: 'https://mankacafe.com.au/faq' },
 }
 
@@ -17,10 +17,7 @@ const faqSchema = {
   mainEntity: FAQS.map((faq) => ({
     '@type': 'Question',
     name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
   })),
 }
 
@@ -29,19 +26,20 @@ export default function FAQPage() {
     <>
       <JsonLd data={faqSchema} />
 
-      {/* Hero */}
-      <div className="page-hero bg-cream">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <nav aria-label="Breadcrumb" className="text-sm text-charcoal/50 mb-4">
-            <Link href="/" className="hover:text-brown transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <span className="text-charcoal">FAQ</span>
+      {/* ─── Header ───────────────────────────────────────────── */}
+      <div className="bg-cream pt-32 pb-12 lg:pt-40 lg:pb-16">
+        <div className="container">
+          <nav aria-label="Breadcrumb" className="text-sm text-stone/60 mb-6">
+            <Link href="/" className="hover:text-ink transition-colors">Home</Link>
+            <span className="mx-2 text-stone/30">/</span>
+            <span>FAQ</span>
           </nav>
-          <h1 className="font-display font-extrabold text-brown text-4xl sm:text-5xl mb-4">
+
+          <h1 className="font-display font-bold text-ink text-4xl sm:text-5xl mb-4" data-reveal>
             Frequently asked questions
           </h1>
-          <p className="text-charcoal/70 text-lg max-w-xl">
-            Everything you need to know about Manka Cafe — location, menu, latte art, bookings and more.
+          <p className="text-stone text-lg max-w-[46ch]" data-reveal data-delay="1">
+            Location, hours, latte art, delivery and gatherings.
           </p>
         </div>
       </div>

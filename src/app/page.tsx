@@ -2,24 +2,27 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import OpeningStatus from '@/components/OpeningStatus'
-import { SIGNATURE_ITEMS } from '@/data/menu'
+import { ImageFrame } from '@/components/ImageFrame'
 import { HOURS } from '@/data/hours'
 
 export const metadata: Metadata = {
   title: 'Manka Cafe Sunnybank | Anime Cafe, Latte Art & Matcha',
   description:
-    'Visit Manka Cafe in Sunnybank — Brisbane\'s cosy anime cafe for custom latte art, matcha drinks, manga, Hong Kong-style French toast and comfort food above Market Square.',
+    'A quiet anime cafe hidden upstairs in Sunnybank. Custom latte art, matcha drinks, Hong Kong-style French toast and manga shelves at Market Square.',
   alternates: { canonical: 'https://mankacafe.com.au' },
 }
+
+const MAPS = 'https://maps.google.com/?q=Shop+58+Level+1+341+Mains+Rd+Sunnybank+QLD+4109'
+const UBEREATS = 'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ'
+const INSTAGRAM = 'https://www.instagram.com/manka_cafe/'
 
 const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'CafeOrCoffeeShop',
   name: 'Manka Cafe 滿華',
   description:
-    'Anime-inspired cafe in Sunnybank serving custom latte art, matcha drinks, Hong Kong-style French toast and cafe meals in a manga-filled space.',
+    'A quiet anime cafe hidden upstairs in Market Square, Sunnybank. Custom latte art, matcha drinks, manga shelves and Hong Kong-style comfort food.',
   url: 'https://mankacafe.com.au',
-  telephone: '',
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Shop 58 Level 1, 341 Mains Rd',
@@ -33,7 +36,7 @@ const localBusinessSchema = {
     latitude: -27.5846,
     longitude: 153.0511,
   },
-  servesCuisine: ['Cafe', 'Modern Australian', 'Asian fusion'],
+  servesCuisine: ['Cafe', 'Japanese', 'Hong Kong'],
   priceRange: '$',
   hasMenu: 'https://mankacafe.com.au/menu',
   openingHoursSpecification: HOURS.filter((h) => !h.closed).map((h) => ({
@@ -49,357 +52,415 @@ const localBusinessSchema = {
   ],
 }
 
-const EXPERIENCE_POINTS = [
+const REVIEWS = [
   {
-    icon: '📚',
-    title: 'Manga Shelves',
-    desc: 'Browse our shelves while you sip. Find something new, or revisit a favourite.',
+    quote: 'The 3D latte art is something else. You almost don\'t want to drink it.',
+    source: 'Google review',
   },
   {
-    icon: '🎨',
-    title: 'Customer Art Wall',
-    desc: 'Customers have drawn directly on our walls. Every visit reveals something new.',
+    quote: 'Hidden upstairs and so worth finding. The French toast alone is a reason to visit.',
+    source: 'Google review',
   },
   {
-    icon: '🎵',
-    title: 'Ghibli / Lofi Vibes',
-    desc: 'Soft background music to help you settle in, slow down and stay a while.',
-  },
-  {
-    icon: '☕',
-    title: 'Custom Latte Art',
-    desc: '2D and 3D milk foam creations made by hand, each one unique.',
-  },
-  {
-    icon: '🏠',
-    title: 'Owner-operated',
-    desc: 'A small, community-driven cafe with a personal, warm welcome.',
-  },
-  {
-    icon: '📍',
-    title: 'Hidden Gem',
-    desc: 'Tucked above Yuen\'s Market on Level 1 of Market Square, Sunnybank.',
+    quote: 'Soft music, manga on the shelves and the best matcha latte I\'ve had in Brisbane.',
+    source: 'Google review',
   },
 ]
 
-function formatHour(time: string): string {
-  const [h, m] = time.split(':').map(Number)
-  const period = h >= 12 ? 'PM' : 'AM'
-  const hour = h > 12 ? h - 12 : h === 0 ? 12 : h
-  return m === 0 ? `${hour}:00 ${period}` : `${hour}:${String(m).padStart(2, '0')} ${period}`
-}
+const WAYFINDING = [
+  { step: '01', text: 'Head to Market Square at 341 Mains Rd, Sunnybank' },
+  { step: '02', text: 'Take the escalator or stairs up to Level 1' },
+  { step: '03', text: 'Look for Shop 58 above Yuen\'s Market' },
+]
 
 export default function HomePage() {
   return (
     <>
       <JsonLd data={localBusinessSchema} />
 
-      {/* Hero */}
-      <section
-        className="relative min-h-screen flex items-center"
-        style={{
-          background:
-            'linear-gradient(135deg, #FFF8F0 0%, #FFF0E8 40%, #FDEAEA 70%, #FFF8F0 100%)',
-        }}
-      >
-        {/* Decorative blobs */}
-        <div
-          aria-hidden="true"
-          className="absolute top-20 right-0 w-80 h-80 rounded-full opacity-30 blur-3xl pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #F5C6C6, transparent)' }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute bottom-20 left-0 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #8DB580, transparent)' }}
-        />
+      {/* ─── Hero ─────────────────────────────────────────────── */}
+      <section className="bg-cream pt-32 pb-20 lg:pt-40 lg:pb-28">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left: copy */}
             <div>
-              <div className="mb-6">
-                <OpeningStatus compact />
+              <div className="mb-6" data-reveal>
+                <OpeningStatus />
               </div>
 
-              <h1 className="font-display font-extrabold text-brown text-4xl sm:text-5xl lg:text-6xl leading-tight mb-5">
-                Sunnybank&apos;s cosy anime cafe for latte art, manga and matcha
+              <h1
+                className="font-display font-bold text-ink text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-6 text-balance"
+                data-reveal
+                data-delay="1"
+              >
+                A quiet anime cafe hidden upstairs in Sunnybank
               </h1>
-              <p className="text-charcoal/70 text-lg leading-relaxed mb-8 max-w-lg">
-                Step into a manga-filled cafe serving custom latte art, matcha drinks, Hong Kong-style
-                French toast and comfort food with Ghibli-inspired vibes.
+
+              <p
+                className="text-stone text-lg leading-relaxed mb-8 max-w-[46ch]"
+                data-reveal
+                data-delay="2"
+              >
+                Custom latte art, matcha drinks, manga shelves and Hong Kong-style comfort food
+                at Level 1 of Market Square.
               </p>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <Link href="/menu" className="btn-primary">
-                  View Menu
+              <div className="flex flex-wrap gap-3" data-reveal data-delay="3">
+                <Link href="/menu" className="btn btn-primary">
+                  See the menu
                 </Link>
                 <a
-                  href="https://maps.google.com/?q=Shop+58+Level+1+341+Mains+Rd+Sunnybank+QLD+4109"
+                  href={MAPS}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-outline"
+                  className="btn btn-outline"
                 >
-                  Get Directions
-                </a>
-                <a
-                  href="https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary"
-                >
-                  Order on Uber Eats
-                </a>
-                <Link href="/private-bookings" className="btn-ghost">
-                  Book an Event
-                </Link>
-              </div>
-            </div>
-
-            {/* Right: visual card */}
-            <div className="hidden lg:block">
-              <div className="relative">
-                <div
-                  className="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-xl"
-                  style={{
-                    background:
-                      'linear-gradient(160deg, #F5E6D0 0%, #F0D5C0 30%, #E8C8B0 60%, #DEB89A 100%)',
-                  }}
-                >
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 p-8">
-                    <div className="text-6xl" aria-hidden="true">☕</div>
-                    <div className="text-center">
-                      <p className="font-display font-bold text-brown/80 text-xl mb-2">
-                        Manka Cafe 滿華
-                      </p>
-                      <p className="text-brown/60 text-sm">
-                        Custom latte art photography here
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 w-full mt-4">
-                      {['3D Foam Art', 'Manga Shelf', 'HK Toast', 'Matcha Latte'].map((label) => (
-                        <div
-                          key={label}
-                          className="aspect-square rounded-2xl bg-brown/10 flex items-center justify-center text-xs text-brown/60 font-medium text-center p-2"
-                        >
-                          {label}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating badge */}
-                <div className="absolute -bottom-4 -left-4 bg-cream rounded-2xl shadow-lg border border-blush/40 px-4 py-3">
-                  <p className="text-xs text-charcoal/60 font-medium">Above Yuen&apos;s Market</p>
-                  <p className="text-sm font-bold text-brown">Level 1, Market Square</p>
-                  <p className="text-xs text-charcoal/50">Sunnybank, Brisbane</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Signature Items */}
-      <section className="py-16 sm:py-20 bg-white" id="menu-highlights">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <h2 className="section-title text-3xl sm:text-4xl mb-3">What we&apos;re known for</h2>
-            <p className="text-charcoal/60 max-w-md mx-auto">
-              Customer favourites worth making the trip for.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SIGNATURE_ITEMS.map((item) => (
-              <div key={item.id} className="card group hover:shadow-md transition-shadow">
-                <div
-                  className={`h-44 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}
-                  role="img"
-                  aria-label={`Photo of ${item.name} at Manka Cafe`}
-                >
-                  <span className="text-4xl opacity-60" aria-hidden="true">
-                    {item.category.includes('Latte') ? '☕' :
-                     item.category.includes('Matcha') ? '🍵' :
-                     item.category.includes('Toast') ? '🍞' :
-                     item.category.includes('Sandwich') ? '🥪' :
-                     item.category.includes('Iced') ? '🧊' : '🍽️'}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {item.tags.slice(0, 2).map((tag) => (
-                      <span key={tag} className="tag">{tag}</span>
-                    ))}
-                  </div>
-                  <h3 className="font-display font-bold text-brown text-lg mb-1">{item.name}</h3>
-                  <p className="text-sm text-charcoal/70 leading-relaxed mb-3">{item.description}</p>
-                  {item.price && (
-                    <p className="font-semibold text-brown text-sm">{item.price}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link href="/menu" className="btn-primary">
-              View Full Menu
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience section */}
-      <section
-        className="py-16 sm:py-20"
-        style={{ background: 'linear-gradient(180deg, #FFF8F0 0%, #FFF0E8 100%)' }}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <div>
-              <h2 className="section-title text-3xl sm:text-4xl mb-4">
-                More than just coffee
-              </h2>
-              <p className="text-charcoal/70 text-lg leading-relaxed mb-6">
-                Manka is a small, creative cafe where customers read manga, draw on the walls, order
-                character latte art and settle in with soft music, warm drinks and comfort food.
-              </p>
-              <p className="text-charcoal/60 leading-relaxed mb-8">
-                Hidden on Level 1 above Yuen&apos;s Market in Sunnybank&apos;s Market Square, it&apos;s the kind of
-                place you tell your friends about.
-              </p>
-              <div className="flex gap-3 flex-wrap">
-                <Link href="/gallery" className="btn-outline">
-                  See the Gallery
-                </Link>
-                <Link href="/visit" className="btn-ghost">
-                  Plan Your Visit
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {EXPERIENCE_POINTS.map((point) => (
-                <div
-                  key={point.title}
-                  className="bg-white rounded-2xl p-4 border border-blush/30 shadow-sm"
-                >
-                  <span className="text-2xl mb-2 block" aria-hidden="true">{point.icon}</span>
-                  <h3 className="font-display font-bold text-brown text-sm mb-1">{point.title}</h3>
-                  <p className="text-xs text-charcoal/60 leading-relaxed">{point.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Visit preview */}
-      <section className="py-16 sm:py-20 bg-white" id="visit-preview">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Hours + address */}
-            <div>
-              <h2 className="section-title text-3xl sm:text-4xl mb-6">Opening hours</h2>
-              <OpeningStatus />
-
-              <div className="mt-6 space-y-2">
-                {HOURS.map((day) => (
-                  <div
-                    key={day.name}
-                    className={`flex justify-between py-2 border-b border-blush/20 text-sm ${
-                      day.closed ? 'text-charcoal/40' : 'text-charcoal'
-                    }`}
-                  >
-                    <span className="font-medium">{day.name}</span>
-                    <span>
-                      {day.closed
-                        ? 'Closed'
-                        : `${formatHour(day.open!)} – ${formatHour(day.close!)}`}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-charcoal/50 mt-3">
-                Hours may vary on public holidays. Check Google Maps for the latest.
-              </p>
-
-              <div className="mt-6">
-                <address className="not-italic">
-                  <p className="font-display font-bold text-brown text-base">
-                    Shop 58 Level 1, 341 Mains Rd
-                  </p>
-                  <p className="text-charcoal/70 text-sm">Sunnybank QLD 4109</p>
-                  <p className="text-charcoal/50 text-sm">Above Yuen&apos;s Market, Market Square</p>
-                </address>
-                <a
-                  href="https://maps.google.com/?q=Shop+58+Level+1+341+Mains+Rd+Sunnybank+QLD+4109"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary mt-4 inline-flex"
-                >
-                  Get Directions
+                  Get directions
                 </a>
               </div>
             </div>
 
-            {/* Map embed */}
-            <div className="rounded-3xl overflow-hidden shadow-sm border border-blush/30 aspect-[4/3]">
-              <iframe
-                src="https://maps.google.com/maps?q=341+Mains+Rd+Sunnybank+QLD+4109&output=embed"
-                className="w-full h-full"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Manka Cafe location — Shop 58 Level 1, 341 Mains Rd, Sunnybank QLD 4109"
-                aria-label="Google Maps showing Manka Cafe location at 341 Mains Rd, Sunnybank"
+            <div data-reveal data-delay="2">
+              {/* TODO: Replace with real hero photography — wide shot of cafe interior,
+                  warm light, manga shelf visible, latte art on table in foreground */}
+              <ImageFrame
+                aspect="4/5"
+                label="Manka Cafe interior"
+                brief="Wide shot of cafe space — manga shelves, warm light, latte art drink on table in foreground. Conveys quiet, cosy atmosphere."
+                className="w-full lg:max-w-[480px] lg:ml-auto"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Private Booking Teaser */}
-      <section
-        className="py-16 sm:py-20"
-        style={{
-          background: 'linear-gradient(135deg, #F5C6C6 0%, #FFF0E8 50%, #F5C6C6 100%)',
-        }}
-      >
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <span className="text-4xl mb-4 block" aria-hidden="true">🎉</span>
-          <h2 className="section-title text-3xl sm:text-4xl mb-4">
-            Planning a small gathering?
-          </h2>
-          <p className="text-charcoal/70 text-lg leading-relaxed mb-8 max-w-xl mx-auto">
-            Manka Cafe offers a cosy, creative setting for birthdays, afternoon teas, Christmas
-            parties, anime meetups and relaxed group events.
-          </p>
-          <Link href="/private-bookings" className="btn-primary">
-            Enquire About a Private Booking
-          </Link>
+      {/* ─── Review strip ─────────────────────────────────────── */}
+      <section className="bg-parchment py-14">
+        <div className="container">
+          <div className="grid sm:grid-cols-3 gap-8 lg:gap-12">
+            {REVIEWS.map((r, i) => (
+              <blockquote key={i} className="space-y-3" data-reveal data-delay={String(i + 1) as '1' | '2' | '3'}>
+                <p className="review-quote text-lg sm:text-xl">&ldquo;{r.quote}&rdquo;</p>
+                <footer className="review-source">{r.source}</footer>
+              </blockquote>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Manka Club CTA */}
-      <section className="py-16 sm:py-20 bg-brown text-cream">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <span className="text-4xl mb-4 block" aria-hidden="true">✉️</span>
-          <h2 className="font-display font-bold text-cream text-3xl sm:text-4xl mb-4">
-            Join Manka Club
-          </h2>
-          <p className="text-cream/70 text-lg leading-relaxed mb-8 max-w-xl mx-auto">
-            Get seasonal drink drops, new latte art designs, birthday treats and event news from
-            Manka Cafe — directly to you.
-          </p>
-          <Link
-            href="/manka-club"
-            className="inline-flex items-center justify-center gap-2 bg-cream text-brown font-semibold px-6 py-3 rounded-2xl hover:bg-cream/90 transition-all duration-150 active:scale-95"
-          >
-            Join for Free
-          </Link>
+      {/* ─── What to order ────────────────────────────────────── */}
+      <section className="bg-cream py-20 lg:py-28">
+        <div className="container">
+          <div className="max-w-2xl mb-12" data-reveal>
+            <p className="text-xs tracking-widest uppercase text-stone mb-3">Start here</p>
+            <h2 className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight text-balance">
+              What people come back for
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: '3D Milk Foam Latte',
+                desc: 'A sculpted character on top of your latte. Made by hand, different every time. The reason most people first visit.',
+                brief: 'Close-up of 3D milk foam character on a latte — cute, detailed, warm lighting.',
+              },
+              {
+                title: 'Hong Kong French Toast',
+                desc: 'Deep-fried thick-cut bread with peanut butter or kaya, golden syrup and butter. A classic done properly.',
+                brief: 'HK French toast on a plate — golden, rustic, slightly indulgent looking.',
+              },
+              {
+                title: 'Iced Matcha Latte',
+                desc: 'Ceremonial-grade matcha over ice with cold milk. Refreshing without being sweet.',
+                brief: 'Iced matcha latte with condensed milk layer — vibrant green, clean background.',
+              },
+              {
+                title: 'Coconut Iced Coffee',
+                desc: 'Espresso over ice with coconut milk. One of the most reordered items on our Uber Eats menu.',
+                brief: 'Coconut iced coffee — dark espresso against white coconut milk over ice.',
+              },
+              {
+                title: 'Chicken Katsu Rice',
+                desc: 'Crispy panko-crumbed chicken over steamed rice with tonkatsu sauce. Satisfying and warming.',
+                brief: 'Chicken katsu rice bowl — crispy, golden chicken, neat presentation.',
+              },
+              {
+                title: 'Manga & the space',
+                desc: 'Browse the shelves while you wait. Settle in. There\'s no rush here — that\'s the point.',
+                brief: 'A corner of the cafe — manga shelf, someone reading quietly, warm atmosphere.',
+              },
+            ].map((item, i) => (
+              <div
+                key={item.title}
+                className="group"
+                data-reveal
+                data-delay={String((i % 3) + 1) as '1' | '2' | '3'}
+              >
+                {/* TODO: Replace ImageFrame with <Image> once photography is ready */}
+                <ImageFrame
+                  aspect="4/3"
+                  brief={item.brief}
+                  className="mb-4 transition-opacity duration-200 group-hover:opacity-90"
+                />
+                <h3 className="font-display font-semibold text-ink text-base mb-1.5">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-stone leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12" data-reveal>
+            <Link href="/menu" className="btn btn-outline">
+              View full menu
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Inside Manka teaser ──────────────────────────────── */}
+      <section className="bg-ink py-20 lg:py-28">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+            <div data-reveal>
+              {/* TODO: Replace with interior photograph — anime art on walls, drawing wall,
+                  soft light, customers in background */}
+              <ImageFrame
+                aspect="5/6"
+                brief="Inside the cafe — drawing wall with customer art, warm ambient light, cosy and characterful. Could be two images side by side."
+              />
+            </div>
+
+            <div>
+              <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
+                Inside Manka
+              </p>
+              <h2
+                className="font-display font-bold text-cream text-3xl sm:text-4xl leading-tight mb-6 text-balance"
+                data-reveal
+                data-delay="1"
+              >
+                There&apos;s a lot to notice if you look around
+              </h2>
+
+              <div className="space-y-5" data-reveal data-delay="2">
+                {[
+                  { label: 'The drawing wall', desc: 'Customers have drawn directly on our walls for years. Each visit adds something new.' },
+                  { label: 'Manga shelves', desc: 'Browse while you wait or settle in for an afternoon with something to read.' },
+                  { label: 'Soft music', desc: 'Studio Ghibli, lofi, and the occasional game soundtrack. Always background, never loud.' },
+                  { label: 'Latte art on the table', desc: 'The 3D foam characters look better in person. Worth seeing once.' },
+                ].map((item) => (
+                  <div key={item.label} className="flex gap-4">
+                    <div className="w-px bg-cream/10 flex-shrink-0 self-stretch ml-1" aria-hidden="true" />
+                    <div>
+                      <p className="text-cream text-sm font-medium mb-0.5">{item.label}</p>
+                      <p className="text-stone text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8" data-reveal data-delay="3">
+                <Link href="/inside-manka" className="btn btn-outline border-cream/20 text-cream hover:bg-cream hover:text-ink">
+                  See inside
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── How latte art works ──────────────────────────────── */}
+      <section className="bg-parchment py-20 lg:py-28">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+
+            <div>
+              <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
+                Latte art
+              </p>
+              <h2
+                className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-6 text-balance"
+                data-reveal
+                data-delay="1"
+              >
+                How it works
+              </h2>
+              <p className="text-stone leading-relaxed mb-8 max-w-[42ch]" data-reveal data-delay="2">
+                There are four types of latte art at Manka. Each is made on warm espresso drinks,
+                dine-in only. The 3D foam sculptures are the most requested.
+              </p>
+
+              <div className="space-y-6" data-reveal data-delay="3">
+                {[
+                  {
+                    num: '01',
+                    name: '3D Milk Foam Art',
+                    desc: 'A sculpted foam character placed on top of your latte. Ask in-store — designs vary daily.',
+                  },
+                  {
+                    num: '02',
+                    name: '2D Drawn Latte',
+                    desc: 'A hand-drawn pour design made directly on your coffee. Available on most days.',
+                  },
+                  {
+                    num: '03',
+                    name: '2D Print Art',
+                    desc: 'A character or design printed onto milk foam. Choose from our collection in-store.',
+                  },
+                  {
+                    num: '04',
+                    name: 'Custom Photo Print',
+                    desc: 'Bring your own reference. DM us on Instagram to arrange before your visit.',
+                  },
+                ].map((item) => (
+                  <div key={item.num} className="flex gap-5">
+                    <span className="font-display text-stone/40 text-sm tabular-nums flex-shrink-0 pt-0.5">
+                      {item.num}
+                    </span>
+                    <div>
+                      <p className="font-medium text-ink text-sm mb-1">{item.name}</p>
+                      <p className="text-stone text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8" data-reveal data-delay="4">
+                <a
+                  href={INSTAGRAM}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-ghost text-brown"
+                >
+                  DM on Instagram for custom orders
+                  <span className="btn-arrow" aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </div>
+
+            <div data-reveal data-delay="2">
+              {/* TODO: Replace with a 2-up photo: 3D foam character on a latte (top),
+                  barista hands working on the foam (bottom) */}
+              <ImageFrame
+                aspect="4/5"
+                brief="Two stacked photos: 3D milk foam character on a latte cup (top half), barista's hands shaping foam (bottom half). Warm, intimate, detailed."
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Find us upstairs ─────────────────────────────────── */}
+      <section className="bg-cream py-20 lg:py-28">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
+            <div>
+              <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
+                Getting here
+              </p>
+              <h2
+                className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-4 text-balance"
+                data-reveal
+                data-delay="1"
+              >
+                Upstairs in Market Square
+              </h2>
+              <p className="text-stone leading-relaxed mb-8" data-reveal data-delay="2">
+                We&apos;re on Level 1 above Yuen&apos;s Market. Easy to miss if you&apos;re new — look for
+                the escalator near the centre entrance.
+              </p>
+
+              <div data-reveal data-delay="3">
+                {WAYFINDING.map((w, i) => (
+                  <div
+                    key={w.step}
+                    className={`wayfind-step ${i === WAYFINDING.length - 1 ? 'pb-0' : ''}`}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-parchment flex items-center justify-center flex-shrink-0">
+                      <span className="font-display text-xs font-bold text-stone">{w.step}</span>
+                    </div>
+                    <p className="text-sm text-ink leading-relaxed pt-2.5">{w.text}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3" data-reveal data-delay="4">
+                <a
+                  href={MAPS}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  Open in Google Maps
+                </a>
+                <Link href="/visit" className="btn btn-outline">
+                  Plan your visit
+                </Link>
+              </div>
+            </div>
+
+            <div data-reveal data-delay="2">
+              <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-parchment">
+                <iframe
+                  src="https://maps.google.com/maps?q=341+Mains+Rd+Sunnybank+QLD+4109&output=embed"
+                  className="w-full h-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Manka Cafe location"
+                  aria-label="Map showing Manka Cafe at 341 Mains Rd, Sunnybank"
+                />
+              </div>
+              <address className="not-italic mt-4 text-sm text-stone leading-relaxed">
+                Shop 58 Level 1, 341 Mains Rd<br />
+                Sunnybank QLD 4109<br />
+                <span className="text-stone/60">Above Yuen&apos;s Market, Market Square</span>
+              </address>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Gatherings teaser ────────────────────────────────── */}
+      <section className="bg-parchment py-20 lg:py-28">
+        <div className="container">
+          <div className="max-w-2xl" data-reveal>
+            <p className="text-xs tracking-widest uppercase text-stone mb-4">Gatherings</p>
+            <h2 className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-4 text-balance">
+              A space for small, unhurried get-togethers
+            </h2>
+            <p className="text-stone leading-relaxed mb-8 max-w-[50ch]">
+              Birthdays, afternoon teas, end-of-year lunches, anime meetups. Manka is quiet enough
+              to talk, small enough to feel private, and unusual enough to be memorable.
+            </p>
+            <Link href="/gatherings" className="btn btn-primary">
+              Enquire about a gathering
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Manka Notes ──────────────────────────────────────── */}
+      <section className="bg-ink py-20 lg:py-28">
+        <div className="container">
+          <div className="max-w-xl" data-reveal>
+            <p className="text-xs tracking-widest uppercase text-stone mb-4">Manka Notes</p>
+            <h2 className="font-display font-bold text-cream text-3xl sm:text-4xl leading-tight mb-4 text-balance">
+              Occasional updates from the cafe
+            </h2>
+            <p className="text-stone leading-relaxed mb-8 max-w-[46ch]">
+              Seasonal drink drops, new latte art designs and event news. No newsletters full of filler —
+              just things worth knowing.
+            </p>
+            <div className="flex flex-wrap gap-3" data-reveal data-delay="1">
+              <Link href="/manka-club" className="btn btn-outline border-cream/20 text-cream hover:bg-cream hover:text-ink">
+                Sign up — it&apos;s free
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </>

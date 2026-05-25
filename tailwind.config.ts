@@ -9,20 +9,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: '#FFF8F0',
-        blush: '#F5C6C6',
-        matcha: '#8DB580',
-        brown: '#6B4226',
-        charcoal: '#3A3A3A',
-        gold: '#E8C872',
+        ink:          '#1C1512',
+        'brown-deep': '#3D2314',
+        brown:        '#6B4226',
+        stone:        '#9E9388',
+        cream:        '#FFF8F0',
+        parchment:    '#F5EFE6',
+        blush:        '#F5C6C6',
+        matcha:       '#8DB580',
+        gold:         '#E8C872',
       },
       fontFamily: {
-        display: ['var(--font-nunito)', 'sans-serif'],
-        body: ['var(--font-inter)', 'sans-serif'],
+        display: ['var(--font-fraunces)', 'Georgia', 'serif'],
+        body:    ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        '2xs': ['0.6875rem', { lineHeight: '1rem' }],
+      },
+      maxWidth: {
+        prose: '62ch',
       },
       borderRadius: {
         '2xl': '1rem',
         '3xl': '1.5rem',
+      },
+      transitionTimingFunction: {
+        'out-expo':  'cubic-bezier(0.16, 1, 0.3, 1)',
+        'out-quart': 'cubic-bezier(0.25, 1, 0.5, 1)',
+        'in-expo':   'cubic-bezier(0.7, 0, 0.84, 0)',
       },
     },
   },

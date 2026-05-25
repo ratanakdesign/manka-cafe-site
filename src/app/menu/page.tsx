@@ -1,14 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
+import { ImageFrame } from '@/components/ImageFrame'
 import { MENU_ITEMS, MENU_CATEGORIES } from '@/data/menu'
 
 export const metadata: Metadata = {
-  title: 'Menu | Latte Art, Matcha, Toast & Brunch',
+  title: 'Menu | Manka Cafe Sunnybank',
   description:
-    'Explore the Manka Cafe menu — custom 2D and 3D latte art, matcha drinks, Hong Kong-style French toast, sandwiches, brunch and cafe favourites in Sunnybank.',
+    'Custom latte art, matcha drinks, Hong Kong-style French toast, sandwiches and comfort food at Manka Cafe, Sunnybank.',
   alternates: { canonical: 'https://mankacafe.com.au/menu' },
 }
+
+const UBEREATS = 'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ'
 
 const menuSchema = {
   '@context': 'https://schema.org',
@@ -27,16 +30,8 @@ const menuSchema = {
   })),
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  'Signature Latte Art': '☕',
-  'Matcha & Coffee': '🍵',
-  'Iced Drinks': '🧊',
-  'Toast & Desserts': '🍞',
-  'Sandwiches': '🥪',
-  'Breakfast & Brunch': '🍳',
-  'Mains': '🍽️',
-  'Pasta': '🍝',
-  'Seasonal Specials': '✨',
+function slugify(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
 export default function MenuPage() {
@@ -48,219 +43,169 @@ export default function MenuPage() {
     <>
       <JsonLd data={menuSchema} />
 
-      {/* Hero */}
-      <div className="page-hero bg-cream">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <nav aria-label="Breadcrumb" className="text-sm text-charcoal/50 mb-4">
-            <Link href="/" className="hover:text-brown transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <span className="text-charcoal">Menu</span>
+      {/* ─── Header ───────────────────────────────────────────── */}
+      <div className="bg-cream pt-32 pb-12 lg:pt-40 lg:pb-16">
+        <div className="container">
+          <nav aria-label="Breadcrumb" className="text-sm text-stone/60 mb-6">
+            <Link href="/" className="hover:text-ink transition-colors">Home</Link>
+            <span className="mx-2 text-stone/30">/</span>
+            <span>Menu</span>
           </nav>
-          <h1 className="font-display font-extrabold text-brown text-4xl sm:text-5xl mb-4">
-            Our Menu
+
+          <h1 className="font-display font-bold text-ink text-4xl sm:text-5xl mb-4" data-reveal>
+            Menu
           </h1>
-          <p className="text-charcoal/70 text-lg max-w-xl mb-6">
-            From custom 3D latte art to Hong Kong-style French toast and comforting mains — there&apos;s
-            something for every visit.
+          <p className="text-stone text-lg max-w-[46ch] mb-6" data-reveal data-delay="1">
+            Custom latte art, matcha, Hong Kong-style French toast and comfort food.
+            Prices are indicative — delivery platform prices may vary.
           </p>
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap" data-reveal data-delay="2">
             <a
-              href="https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ"
+              href={UBEREATS}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
+              className="btn btn-primary"
             >
               Order on Uber Eats
             </a>
-            <Link href="/visit" className="btn-outline">
-              Visit Us
+            <Link href="/visit" className="btn btn-outline">
+              Dine in
             </Link>
           </div>
-          <p className="text-xs text-charcoal/50 mt-4">
-            Prices shown are indicative in-store prices. Delivery platform prices may vary.
-          </p>
         </div>
       </div>
 
-      {/* Sticky category nav */}
-      <div className="sticky top-16 z-30 bg-cream/95 backdrop-blur-sm border-b border-blush/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
+      {/* ─── Category nav ─────────────────────────────────────── */}
+      <div className="sticky top-16 z-30 bg-cream/95 backdrop-blur-sm border-b border-parchment">
+        <div className="container">
+          <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide -mx-1 px-1">
             {categories.map((cat) => (
               <a
                 key={cat}
                 href={`#${slugify(cat)}`}
-                className="flex-shrink-0 text-sm font-medium px-3 py-1.5 rounded-xl text-charcoal/70 hover:bg-blush/30 hover:text-brown transition-colors whitespace-nowrap"
+                className="flex-shrink-0 text-xs font-medium px-3 py-1.5 rounded-full text-stone
+                           hover:bg-parchment hover:text-ink transition-colors whitespace-nowrap
+                           scroll-mt-nav"
               >
-                {CATEGORY_ICONS[cat]} {cat}
+                {cat}
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Latte Art feature section */}
+      {/* ─── Latte Art — featured section ─────────────────────── */}
       <section
-        className="py-12 sm:py-16"
-        style={{ background: 'linear-gradient(135deg, #FFF8F0, #FFF0E8)' }}
-        id={slugify('Signature Latte Art')}
+        id={slugify('Latte Art Drinks')}
+        className="bg-parchment py-16 lg:py-20 scroll-mt-nav"
         aria-labelledby="latte-art-heading"
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-10 items-start">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
             <div>
-              <span className="text-3xl mb-2 block" aria-hidden="true">☕</span>
-              <h2 id="latte-art-heading" className="section-title text-3xl sm:text-4xl mb-4">
-                Signature Latte Art
+              <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
+                Latte Art Drinks
+              </p>
+              <h2
+                id="latte-art-heading"
+                className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-4 text-balance"
+                data-reveal
+                data-delay="1"
+              >
+                Made by hand, different every time
               </h2>
-              <p className="text-charcoal/70 leading-relaxed mb-6">
-                Our latte art is what Manka Cafe is most known for. Each drink is made by hand —
-                from sculpted 3D milk foam characters to hand-drawn pours and custom photo prints.
+              <p className="text-stone leading-relaxed mb-8 max-w-[44ch]" data-reveal data-delay="2">
+                All latte art is made on warm espresso drinks. Custom photo prints require
+                prior arrangement — DM us on Instagram before your visit.
               </p>
 
-              {/* How it works */}
-              <div className="bg-white rounded-2xl p-5 border border-blush/30 mb-6">
-                <h3 className="font-display font-bold text-brown text-base mb-4">
-                  How custom latte art works
-                </h3>
-                <ul className="space-y-3 text-sm text-charcoal/70">
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blush/60 flex items-center justify-center text-xs font-bold text-brown">1</span>
-                    <span>
-                      <strong className="text-charcoal">3D Milk Foam Art:</strong> Sculpted characters
-                      made from milk foam on top of your latte. Each one is unique — ask in-store.
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blush/60 flex items-center justify-center text-xs font-bold text-brown">2</span>
-                    <span>
-                      <strong className="text-charcoal">2D Drawing:</strong> Classic hand-drawn latte art
-                      poured directly onto your drink. Available daily.
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blush/60 flex items-center justify-center text-xs font-bold text-brown">3</span>
-                    <span>
-                      <strong className="text-charcoal">2D Print Art:</strong> Characters or designs
-                      printed onto milk foam. Choose from our collection.
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blush/60 flex items-center justify-center text-xs font-bold text-brown">4</span>
-                    <span>
-                      <strong className="text-charcoal">Custom Photo Print:</strong> Bring your own
-                      photo or character. DM us on Instagram before your visit to arrange.
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-sm text-amber-800">
-                <strong>Note:</strong> Latte art is available on warm drinks only. Custom photo prints
-                require prior arrangement via Instagram DM. Best enjoyed dine-in.
-              </div>
-
-              <div className="mt-5 flex gap-3 flex-wrap">
-                <a
-                  href="https://www.instagram.com/manka_cafe/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary"
-                >
-                  DM on Instagram
-                </a>
+              <div className="space-y-4" data-reveal data-delay="3">
+                {MENU_ITEMS.filter((i) => i.category === 'Latte Art Drinks').map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-start justify-between gap-6 py-3 border-b border-parchment last:border-0"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium text-ink text-sm mb-1">{item.name}</p>
+                      <p className="text-stone text-sm leading-relaxed">{item.description}</p>
+                      {item.note && (
+                        <p className="text-xs text-stone/60 mt-1 italic">{item.note}</p>
+                      )}
+                    </div>
+                    {item.price && (
+                      <p className="text-sm text-stone flex-shrink-0 tabular-nums">{item.price}</p>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Latte art item cards */}
-            <div className="space-y-3">
-              {MENU_ITEMS.filter((i) => i.category === 'Signature Latte Art').map((item) => (
-                <div key={item.id} className="card flex gap-4 p-4">
-                  <div
-                    className={`flex-shrink-0 w-20 h-20 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-2xl`}
-                    role="img"
-                    aria-label={`Photo of ${item.name}`}
-                  >
-                    ☕
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-display font-bold text-brown text-sm">{item.name}</h3>
-                      {item.price && (
-                        <span className="flex-shrink-0 text-sm font-semibold text-brown">{item.price}</span>
-                      )}
-                    </div>
-                    <p className="text-xs text-charcoal/70 mt-1 leading-relaxed">{item.description}</p>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {item.tags.slice(0, 2).map((tag) => (
-                        <span key={tag} className="tag text-xs">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div data-reveal data-delay="2">
+              {/* TODO: Replace with latte art hero photo — 3D foam character on a latte,
+                  close up, warm light, shallow depth of field */}
+              <ImageFrame
+                aspect="4/5"
+                brief="3D milk foam character on a latte — close up, warm light, cafe context visible in soft background."
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Remaining categories */}
+      {/* ─── Remaining categories ─────────────────────────────── */}
       {categories
-        .filter((cat) => cat !== 'Signature Latte Art')
-        .map((category) => {
+        .filter((cat) => cat !== 'Latte Art Drinks')
+        .map((category, ci) => {
           const items = MENU_ITEMS.filter((i) => i.category === category)
+          const featuredItem = items.find((i) => i.featured)
+
           return (
             <section
               key={category}
               id={slugify(category)}
-              className="py-12 sm:py-16 border-t border-blush/20"
+              className={`py-16 lg:py-20 scroll-mt-nav ${ci % 2 === 0 ? 'bg-cream' : 'bg-parchment'}`}
               aria-labelledby={`heading-${slugify(category)}`}
             >
-              <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                <div className="flex items-center gap-3 mb-8">
-                  <span className="text-2xl" aria-hidden="true">{CATEGORY_ICONS[category]}</span>
-                  <h2
-                    id={`heading-${slugify(category)}`}
-                    className="section-title text-2xl sm:text-3xl"
-                  >
-                    {category}
-                  </h2>
+              <div className="container">
+                <div className="mb-10" data-reveal>
+                  <p className="text-xs tracking-widest uppercase text-stone mb-3">{category}</p>
+                  {featuredItem && (
+                    <h2
+                      id={`heading-${slugify(category)}`}
+                      className="font-display font-bold text-ink text-2xl sm:text-3xl leading-tight text-balance sr-only"
+                    >
+                      {category}
+                    </h2>
+                  )}
                 </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {items.map((item) => (
-                    <div key={item.id} className="card flex flex-col">
-                      <div
-                        className={`h-36 bg-gradient-to-br ${item.gradient} flex items-center justify-center`}
-                        role="img"
-                        aria-label={`Photo of ${item.name} at Manka Cafe`}
-                      >
-                        <span className="text-3xl opacity-50" aria-hidden="true">
-                          {CATEGORY_ICONS[category]}
-                        </span>
-                      </div>
-                      <div className="p-4 flex-1 flex flex-col">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <h3 className="font-display font-bold text-brown text-sm leading-tight">
-                            {item.name}
-                          </h3>
-                          {item.price && (
-                            <span className="flex-shrink-0 text-sm font-semibold text-brown">
-                              {item.price}
-                            </span>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+                  {items.map((item, ii) => (
+                    <div
+                      key={item.id}
+                      data-reveal
+                      data-delay={String((ii % 3) + 1) as '1' | '2' | '3'}
+                    >
+                      {item.featured && (
+                        <div className="mb-4">
+                          {/* TODO: Replace with real photo for this item */}
+                          <ImageFrame
+                            aspect="4/3"
+                            brief={`${item.name} — food or drink photography, natural light, Manka Cafe setting.`}
+                          />
+                        </div>
+                      )}
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <p className="font-medium text-ink text-sm mb-1">{item.name}</p>
+                          <p className="text-stone text-sm leading-relaxed">{item.description}</p>
+                          {item.note && (
+                            <p className="text-xs text-stone/60 mt-1 italic">{item.note}</p>
                           )}
                         </div>
-                        <p className="text-xs text-charcoal/70 leading-relaxed flex-1">
-                          {item.description}
-                        </p>
-                        {item.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-3">
-                            {item.tags.slice(0, 2).map((tag) => (
-                              <span key={tag} className="tag">{tag}</span>
-                            ))}
-                          </div>
-                        )}
-                        {item.available === 'seasonal' && (
-                          <p className="text-xs text-amber-700 mt-2 font-medium">✨ Limited availability</p>
+                        {item.price && (
+                          <p className="text-sm text-stone flex-shrink-0 tabular-nums">{item.price}</p>
                         )}
                       </div>
                     </div>
@@ -271,30 +216,35 @@ export default function MenuPage() {
           )
         })}
 
-      {/* Footer CTA */}
-      <section className="py-16 bg-cream border-t border-blush/20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="section-title text-2xl mb-3">Ready to visit?</h2>
-          <p className="text-charcoal/60 mb-6">
-            Dine in for the full experience — especially for our 3D latte art.
-          </p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <Link href="/visit" className="btn-primary">Plan Your Visit</Link>
-            <a
-              href="https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline"
-            >
-              Order on Uber Eats
-            </a>
+      {/* ─── Footer CTA ───────────────────────────────────────── */}
+      <section className="bg-ink py-16 lg:py-20">
+        <div className="container">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6" data-reveal>
+            <div>
+              <p className="font-display font-bold text-cream text-xl mb-1">
+                Dine in for the full experience
+              </p>
+              <p className="text-stone text-sm">
+                Especially for the 3D latte art — it doesn&apos;t travel well.
+              </p>
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/visit" className="btn btn-outline border-cream/20 text-cream hover:bg-cream hover:text-ink">
+                Plan your visit
+              </Link>
+              <a
+                href={UBEREATS}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost text-stone hover:text-cream"
+              >
+                Order delivery
+                <span className="btn-arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
     </>
   )
-}
-
-function slugify(str: string) {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }

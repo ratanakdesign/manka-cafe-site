@@ -2,82 +2,250 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --color-cream: #FFF8F0;
-    --color-blush: #F5C6C6;
-    --color-matcha: #8DB580;
-    --color-brown: #6B4226;
-    --color-charcoal: #3A3A3A;
-    --color-gold: #E8C872;
-  }
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+  /* Easing */
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-expo:   cubic-bezier(0.7, 0, 0.84, 0);
 
+  /* Duration */
+  --dur-instant: 100ms;
+  --dur-fast:    160ms;
+  --dur-base:    220ms;
+  --dur-slow:    400ms;
+  --dur-reveal:  600ms;
+
+  /* Safe area */
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+@layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-cream text-charcoal font-body;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-cream text-ink font-body antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
   }
 
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+    font-optical-sizing: auto;
   }
 
-  /* Safe area inset for mobile sticky bar */
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+  ::selection {
+    @apply bg-blush/60 text-brown-deep;
   }
 
-  .safe-area-inset-bottom {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Focus-visible: keyboard only */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brown ring-offset-2 ring-offset-cream;
+  }
+  :focus:not(:focus-visible) {
+    @apply outline-none;
   }
 }
 
+/* ─── Scroll Reveal ──────────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity  var(--dur-reveal) var(--ease-out-expo),
+    transform var(--dur-reveal) var(--ease-out-expo);
+}
+[data-reveal][data-delay="1"] { transition-delay: 80ms;  }
+[data-reveal][data-delay="2"] { transition-delay: 160ms; }
+[data-reveal][data-delay="3"] { transition-delay: 240ms; }
+[data-reveal][data-delay="4"] { transition-delay: 320ms; }
+[data-reveal][data-delay="5"] { transition-delay: 400ms; }
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 0;
+    transform: none;
+    transition: opacity 300ms ease;
+  }
+  [data-reveal][data-delay] {
+    transition-delay: 0ms !important;
+  }
+}
+
+/* ─── Buttons ────────────────────────────────────────────────── */
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-brown text-cream font-semibold px-5 py-3 rounded-2xl hover:bg-brown/90 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2 active:scale-95;
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-body font-medium
+           rounded-full px-5 py-2.5 text-sm leading-none
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    transition:
+      background-color var(--dur-fast) var(--ease-out-quart),
+      color            var(--dur-fast) var(--ease-out-quart),
+      border-color     var(--dur-fast) var(--ease-out-quart),
+      transform        var(--dur-instant) var(--ease-out-quart),
+      box-shadow       var(--dur-fast) var(--ease-out-quart),
+      opacity          var(--dur-fast) var(--ease-out-quart);
+  }
+  .btn:hover   { transform: translateY(-1px); }
+  .btn:active  { transform: scale(0.97) translateY(0); }
+  .btn:disabled {
+    @apply opacity-40 pointer-events-none;
+    transform: none;
   }
 
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-matcha text-white font-semibold px-5 py-3 rounded-2xl hover:bg-matcha/90 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-matcha focus-visible:ring-offset-2 active:scale-95;
+  .btn-primary {
+    @apply btn bg-ink text-cream focus-visible:ring-ink;
+  }
+  .btn-primary:hover {
+    @apply bg-brown-deep;
+    box-shadow: 0 4px 16px rgba(28, 21, 18, 0.22);
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-brown text-brown font-semibold px-5 py-3 rounded-2xl hover:bg-blush/30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2 active:scale-95;
+    @apply btn border border-ink text-ink bg-transparent focus-visible:ring-ink;
+  }
+  .btn-outline:hover {
+    @apply bg-ink text-cream;
+    box-shadow: 0 4px 16px rgba(28, 21, 18, 0.16);
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 text-brown font-semibold px-5 py-3 rounded-2xl hover:bg-blush/30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2;
+    @apply btn text-brown bg-transparent focus-visible:ring-brown;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .btn-ghost:hover {
+    @apply text-ink;
+    transform: none;
   }
 
-  .card {
-    @apply bg-white rounded-3xl overflow-hidden shadow-sm border border-blush/30;
+  /* Arrow-nudge for external / text links */
+  .btn-ghost .btn-arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease-out-quart);
+  }
+  .btn-ghost:hover .btn-arrow {
+    transform: translateX(3px);
   }
 
-  .section-title {
-    @apply font-display font-bold text-brown;
+  /* ─── Form fields ───────────────────────────────────────── */
+  .field-label {
+    @apply block text-xs font-medium tracking-wide text-stone uppercase mb-2;
+    letter-spacing: 0.08em;
   }
 
-  .tag {
-    @apply inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-blush/60 text-brown;
+  .field-input {
+    @apply w-full px-4 py-3 bg-white border border-parchment text-ink
+           text-sm rounded-xl placeholder-stone/50
+           focus:outline-none focus:border-brown/50 focus:ring-0;
+    transition:
+      border-color var(--dur-fast) var(--ease-out-quart),
+      box-shadow   var(--dur-fast) var(--ease-out-quart);
+  }
+  .field-input:focus {
+    box-shadow: 0 0 0 3px rgba(107, 66, 38, 0.10);
+  }
+  .field-input.is-error {
+    @apply border-rose-400;
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.08);
   }
 
-  .tag-green {
-    @apply inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-800;
+  .field-error {
+    @apply text-xs text-rose-600 mt-1.5;
   }
 
-  .form-input {
-    @apply w-full px-4 py-3 rounded-2xl border border-blush bg-white text-charcoal placeholder-charcoal/40 focus:outline-none focus:ring-2 focus:ring-brown/30 focus:border-brown transition-colors text-sm;
+  /* ─── Section spacing ───────────────────────────────────── */
+  .section {
+    @apply py-20 sm:py-28;
   }
 
-  .form-label {
-    @apply block text-sm font-medium text-charcoal mb-1.5;
+  .container {
+    @apply max-w-6xl mx-auto px-5 sm:px-8 lg:px-12;
   }
 
-  .page-hero {
-    @apply pt-28 pb-16 sm:pt-32 sm:pb-20;
+  /* ─── Image frame placeholders ──────────────────────────── */
+  .img-frame {
+    @apply relative overflow-hidden rounded-2xl;
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0px,
+        transparent 14px,
+        rgba(107, 66, 38, 0.025) 14px,
+        rgba(107, 66, 38, 0.025) 15px
+      ),
+      #F5EFE6;
   }
+  .img-frame-label {
+    @apply absolute bottom-0 left-0 right-0 px-4 py-2.5
+           text-2xs font-medium tracking-widest uppercase text-stone/70
+           bg-gradient-to-t from-parchment/80 to-transparent;
+  }
+
+  /* ─── Review quote ──────────────────────────────────────── */
+  .review-quote {
+    @apply font-display italic text-brown-deep leading-snug;
+  }
+  .review-source {
+    @apply text-xs tracking-widest uppercase text-stone mt-2;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* ─── Utilities ──────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance   { text-wrap: balance; }
+  .pb-safe        { padding-bottom: var(--safe-bottom); }
+  .scroll-mt-nav  { scroll-margin-top: 5rem; }
+}
+
+/* ─── Nav underline indicator ────────────────────────────────── */
+.nav-link {
+  @apply relative text-sm text-stone font-medium py-1;
+  transition: color var(--dur-fast) var(--ease-out-quart);
+}
+.nav-link::after {
+  content: '';
+  @apply absolute -bottom-0.5 left-0 w-0 h-px bg-ink;
+  transition: width var(--dur-base) var(--ease-out-expo);
+}
+.nav-link:hover,
+.nav-link.is-active {
+  @apply text-ink;
+}
+.nav-link.is-active::after,
+.nav-link:hover::after {
+  @apply w-full;
+}
+
+/* ─── Wayfinding steps ───────────────────────────────────────── */
+.wayfind-step {
+  @apply relative flex items-start gap-4 py-4;
+  transition: opacity var(--dur-fast) var(--ease-out-quart);
+}
+.wayfind-step:hover {
+  @apply opacity-80;
+}
+.wayfind-step::before {
+  content: '';
+  @apply absolute left-5 top-10 bottom-0 w-px bg-parchment;
+}
+.wayfind-step:last-child::before {
+  @apply hidden;
+}
+
+/* ─── Mobile sticky bar slide-in ────────────────────────────── */
+.sticky-cta-bar {
+  transform: translateY(100%);
+  transition: transform var(--dur-slow) var(--ease-out-expo);
+}
+.sticky-cta-bar.is-visible {
+  transform: translateY(0);
 }

@@ -3,231 +3,182 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const INTERESTS = [
-  { id: 'latte-art', label: 'Latte art' },
-  { id: 'matcha', label: 'Matcha' },
-  { id: 'manga-events', label: 'Manga / anime events' },
-  { id: 'study-specials', label: 'Study specials' },
-  { id: 'food-specials', label: 'Food specials' },
-  { id: 'private-bookings', label: 'Private bookings' },
-]
+interface Fields {
+  name: string
+  email: string
+  birthday: string
+}
 
-const MEMBER_BENEFITS = [
-  { icon: '🎂', title: 'Birthday treat', desc: 'A little something special on your birthday month.' },
-  { icon: '🍵', title: 'Seasonal drink drops', desc: 'Be first to know when new seasonal drinks launch.' },
-  { icon: '🌸', title: 'Anime event updates', desc: 'Early notice on meetups, themed nights and events.' },
-  { icon: '☕', title: 'New latte art designs', desc: 'Find out when new latte art options are available.' },
-  { icon: '🎉', title: 'Private event news', desc: 'Exclusive announcements and booking priority.' },
-  { icon: '📖', title: 'Study day specials', desc: 'Special offers for calm weekday study sessions.' },
-]
+type Touched = Partial<Record<keyof Fields, boolean>>
+type Errors  = Partial<Record<keyof Fields, string>>
+
+function validate(f: Fields): Errors {
+  const e: Errors = {}
+  if (!f.name.trim())  e.name  = 'Please enter your first name.'
+  if (!f.email.trim()) e.email = 'Please enter your email.'
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email))
+    e.email = 'Please enter a valid email address.'
+  return e
+}
 
 export default function MankaClubClient() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [interests, setInterests] = useState<string[]>([])
+  const [fields, setFields] = useState<Fields>({ name: '', email: '', birthday: '' })
+  const [touched, setTouched] = useState<Touched>({})
   const [consent, setConsent] = useState(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [consentTouched, setConsentTouched] = useState(false)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
 
-  function toggleInterest(id: string) {
-    setInterests((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    )
+  const errors = validate(fields)
+  const visibleErrors: Errors = Object.fromEntries(
+    Object.entries(errors).filter(([k]) => touched[k as keyof Fields])
+  ) as Errors
+  const consentError = consentTouched && !consent
+
+  function set(key: keyof Fields) {
+    return (e: React.ChangeEvent<HTMLInputElement>) =>
+      setFields((prev) => ({ ...prev, [key]: e.target.value }))
   }
 
-  function validate() {
-    const errs: Record<string, string> = {}
-    if (!name.trim()) errs.name = 'Please enter your first name.'
-    if (!email.trim()) errs.email = 'Please enter your email address.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = 'Please enter a valid email address.'
-    if (!consent) errs.consent = 'You need to agree to join Manka Club.'
-    setErrors(errs)
-    return Object.keys(errs).length === 0
+  function blur(key: keyof Fields) {
+    return () => setTouched((prev) => ({ ...prev, [key]: true }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!validate()) return
+    setTouched({ name: true, email: true, birthday: true })
+    setConsentTouched(true)
+    if (Object.keys(validate(fields)).length > 0 || !consent) return
     setStatus('submitting')
     await new Promise((r) => setTimeout(r, 1000))
     setStatus('success')
   }
 
-  return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-      <div className="grid lg:grid-cols-5 gap-12">
-        {/* Left: benefits */}
-        <div className="lg:col-span-2">
-          <h2 className="section-title text-2xl mb-6">Member benefits</h2>
-          <div className="space-y-4">
-            {MEMBER_BENEFITS.map((benefit) => (
-              <div key={benefit.title} className="flex gap-3">
-                <span className="text-2xl flex-shrink-0" aria-hidden="true">{benefit.icon}</span>
-                <div>
-                  <h3 className="font-display font-bold text-brown text-sm">{benefit.title}</h3>
-                  <p className="text-xs text-charcoal/60 mt-0.5">{benefit.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 bg-blush/30 rounded-2xl p-4 text-sm text-charcoal/70">
-            <strong className="text-brown">No spam.</strong> We only send things worth reading —
-            seasonal drops, events, and the occasional special. Unsubscribe any time.
-          </div>
-        </div>
-
-        {/* Right: form */}
-        <div className="lg:col-span-3">
-          {status === 'success' ? (
-            <div className="bg-green-50 border border-green-200 rounded-3xl p-8 text-center">
-              <span className="text-5xl mb-4 block" aria-hidden="true">🌸</span>
-              <h2 className="font-display font-bold text-green-800 text-2xl mb-3">
-                Welcome to Manka Club!
-              </h2>
-              <p className="text-green-700 leading-relaxed mb-6">
-                You&apos;re in. Keep an eye on your inbox for seasonal drops, new latte art
-                announcements and event news from Manka Cafe.
-              </p>
-              <Link href="/" className="btn-primary">Back to Home</Link>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate className="space-y-6">
-              <h2 className="section-title text-2xl">Sign up — it&apos;s free</h2>
-
-              <div>
-                <label htmlFor="fname" className="form-label">
-                  First name <span aria-hidden="true" className="text-rose-500">*</span>
-                </label>
-                <input
-                  id="fname"
-                  type="text"
-                  autoComplete="given-name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value)
-                    if (errors.name) setErrors((p) => ({ ...p, name: '' }))
-                  }}
-                  aria-required="true"
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? 'fname-error' : undefined}
-                  className={`form-input ${errors.name ? 'border-rose-400' : ''}`}
-                />
-                {errors.name && (
-                  <p id="fname-error" role="alert" className="mt-1 text-xs text-rose-600">{errors.name}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="mc-email" className="form-label">
-                  Email address <span aria-hidden="true" className="text-rose-500">*</span>
-                </label>
-                <input
-                  id="mc-email"
-                  type="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value)
-                    if (errors.email) setErrors((p) => ({ ...p, email: '' }))
-                  }}
-                  aria-required="true"
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? 'mc-email-error' : undefined}
-                  className={`form-input ${errors.email ? 'border-rose-400' : ''}`}
-                />
-                {errors.email && (
-                  <p id="mc-email-error" role="alert" className="mt-1 text-xs text-rose-600">{errors.email}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="mc-phone" className="form-label">
-                  Phone number <span className="text-charcoal/40 font-normal">(optional)</span>
-                </label>
-                <input
-                  id="mc-phone"
-                  type="tel"
-                  autoComplete="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="form-input"
-                  placeholder="For SMS updates if you prefer"
-                />
-              </div>
-
-              <div>
-                <p className="form-label">
-                  What interests you most?{' '}
-                  <span className="text-charcoal/40 font-normal">(optional)</span>
-                </p>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {INTERESTS.map((interest) => (
-                    <button
-                      key={interest.id}
-                      type="button"
-                      onClick={() => toggleInterest(interest.id)}
-                      aria-pressed={interests.includes(interest.id)}
-                      className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors ${
-                        interests.includes(interest.id)
-                          ? 'bg-brown text-cream border-brown'
-                          : 'bg-white text-charcoal border-blush hover:bg-blush/30'
-                      }`}
-                    >
-                      {interest.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={consent}
-                    onChange={(e) => {
-                      setConsent(e.target.checked)
-                      if (errors.consent) setErrors((p) => ({ ...p, consent: '' }))
-                    }}
-                    aria-required="true"
-                    aria-invalid={!!errors.consent}
-                    aria-describedby={errors.consent ? 'consent-error' : undefined}
-                    className="mt-0.5 w-4 h-4 rounded accent-brown flex-shrink-0"
-                  />
-                  <span className="text-sm text-charcoal/70 leading-relaxed">
-                    I agree to receive email updates from Manka Cafe. I understand I can unsubscribe
-                    at any time via the link in any email.{' '}
-                    <span aria-hidden="true" className="text-rose-500">*</span>
-                  </span>
-                </label>
-                {errors.consent && (
-                  <p id="consent-error" role="alert" className="mt-1 text-xs text-rose-600">{errors.consent}</p>
-                )}
-              </div>
-
-              <p className="text-xs text-charcoal/40">
-                Your details are kept private and will never be shared with third parties.
-              </p>
-
-              {status === 'error' && (
-                <div role="alert" className="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-sm text-rose-800">
-                  Something went wrong. Please try again or contact us via{' '}
-                  <a href="https://www.instagram.com/manka_cafe/" target="_blank" rel="noopener noreferrer" className="underline">Instagram</a>.
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === 'submitting'}
-                className="btn-primary w-full disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {status === 'submitting' ? 'Joining…' : 'Join Manka Club'}
-              </button>
-            </form>
-          )}
-        </div>
+  if (status === 'success') {
+    return (
+      <div className="bg-parchment rounded-2xl p-8 text-center border border-parchment">
+        <p className="font-display font-bold text-ink text-2xl mb-3">You&apos;re in</p>
+        <p className="text-stone leading-relaxed mb-6 max-w-[36ch] mx-auto">
+          Thanks for joining Manka Notes. We&apos;ll be in touch when there&apos;s something worth sharing.
+        </p>
+        <Link href="/" className="btn btn-outline">Back to home</Link>
       </div>
-    </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="space-y-5">
+
+      <div>
+        <label htmlFor="mc-name" className="field-label">
+          First name <span aria-hidden="true" className="text-stone/40 normal-case tracking-normal font-normal">*</span>
+        </label>
+        <input
+          id="mc-name"
+          type="text"
+          autoComplete="given-name"
+          value={fields.name}
+          onChange={set('name')}
+          onBlur={blur('name')}
+          aria-required="true"
+          aria-invalid={!!visibleErrors.name}
+          aria-describedby={visibleErrors.name ? 'mc-name-err' : undefined}
+          className={`field-input ${visibleErrors.name ? 'is-error' : ''}`}
+        />
+        {visibleErrors.name && (
+          <p id="mc-name-err" role="alert" className="field-error">{visibleErrors.name}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="mc-email" className="field-label">
+          Email address <span aria-hidden="true" className="text-stone/40 normal-case tracking-normal font-normal">*</span>
+        </label>
+        <input
+          id="mc-email"
+          type="email"
+          autoComplete="email"
+          value={fields.email}
+          onChange={set('email')}
+          onBlur={blur('email')}
+          aria-required="true"
+          aria-invalid={!!visibleErrors.email}
+          aria-describedby={visibleErrors.email ? 'mc-email-err' : undefined}
+          className={`field-input ${visibleErrors.email ? 'is-error' : ''}`}
+        />
+        {visibleErrors.email && (
+          <p id="mc-email-err" role="alert" className="field-error">{visibleErrors.email}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="mc-birthday" className="field-label">
+          Birthday month <span className="text-stone/40 normal-case tracking-normal font-normal">(for birthday treat)</span>
+        </label>
+        <select
+          id="mc-birthday"
+          value={fields.birthday}
+          onChange={(e) => setFields((p) => ({ ...p, birthday: e.target.value }))}
+          className="field-input"
+        >
+          <option value="">Select month…</option>
+          {['January','February','March','April','May','June','July','August','September','October','November','December'].map((m) => (
+            <option key={m} value={m}>{m}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="pt-1">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => {
+              setConsent(e.target.checked)
+              setConsentTouched(true)
+            }}
+            aria-required="true"
+            aria-invalid={consentError}
+            aria-describedby={consentError ? 'mc-consent-err' : undefined}
+            className="mt-0.5 w-4 h-4 rounded accent-brown flex-shrink-0"
+          />
+          <span className="text-sm text-stone leading-relaxed">
+            I agree to receive occasional email updates from Manka Cafe.
+            I can unsubscribe at any time.{' '}
+            <span aria-hidden="true" className="text-stone/40">*</span>
+          </span>
+        </label>
+        {consentError && (
+          <p id="mc-consent-err" role="alert" className="field-error">
+            Please agree to continue.
+          </p>
+        )}
+      </div>
+
+      {status === 'error' && (
+        <div role="alert" className="bg-rose-50 border border-rose-200 rounded-xl px-4 py-3 text-sm text-rose-800">
+          Something went wrong — please try again or find us on{' '}
+          <a
+            href="https://www.instagram.com/manka_cafe/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            Instagram
+          </a>.
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={status === 'submitting'}
+        className="btn btn-primary w-full"
+      >
+        {status === 'submitting' ? 'Joining…' : 'Join Manka Notes'}
+      </button>
+
+      <p className="text-xs text-stone/50 text-center">
+        Your details are kept private and never shared.
+      </p>
+    </form>
   )
 }

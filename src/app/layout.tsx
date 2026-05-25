@@ -1,19 +1,23 @@
 import type { Metadata } from 'next'
-import { Nunito, Inter } from 'next/font/google'
+import { Fraunces, DM_Sans } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import MobileStickyCTA from '@/components/MobileStickyCTA'
+import RevealInit from '@/components/RevealInit'
 
-const nunito = Nunito({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  variable: '--font-nunito',
+  variable: '--font-fraunces',
+  weight: ['300', '400', '600', '700', '900'],
+  style: ['normal', 'italic'],
   display: 'swap',
 })
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-dm-sans',
+  weight: ['300', '400', '500', '600'],
   display: 'swap',
 })
 
@@ -21,52 +25,38 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://mankacafe.com.au'),
   title: {
     default: 'Manka Cafe Sunnybank | Anime Cafe, Latte Art & Matcha',
-    template: '%s | Manka Cafe Sunnybank',
+    template: '%s | Manka Cafe',
   },
   description:
-    'Visit Manka Cafe in Sunnybank — Brisbane\'s cosy anime cafe for custom latte art, matcha drinks, manga, Hong Kong-style French toast and comfort food.',
+    'A quiet anime-inspired cafe hidden upstairs in Market Square, Sunnybank. Custom latte art, manga shelves, Hong Kong-style French toast and warm comfort food.',
   keywords: [
-    'Manka Cafe',
-    'anime cafe Sunnybank',
-    'anime cafe Brisbane',
-    'manga cafe Brisbane',
-    'latte art Brisbane',
-    'matcha Sunnybank',
-    'custom latte art',
-    'Sunnybank cafe',
-    'Market Square cafe',
-    'Hong Kong French toast Brisbane',
+    'Manka Cafe', 'anime cafe Sunnybank', 'anime cafe Brisbane',
+    'manga cafe Brisbane', 'latte art Brisbane', 'matcha Sunnybank',
+    'custom latte art', 'Market Square cafe Sunnybank',
   ],
-  authors: [{ name: 'Manka Cafe 滿華' }],
-  creator: 'Manka Cafe 滿華',
   openGraph: {
     type: 'website',
     locale: 'en_AU',
     url: 'https://mankacafe.com.au',
     siteName: 'Manka Cafe 滿華',
     title: 'Manka Cafe Sunnybank | Anime Cafe, Latte Art & Matcha',
-    description:
-      'Brisbane\'s cosy anime cafe in Sunnybank. Custom latte art, matcha, manga shelves, HK-style French toast and comfort food above Market Square.',
+    description: 'A quiet anime cafe hidden upstairs in Market Square, Sunnybank.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Manka Cafe Sunnybank | Anime Cafe, Latte Art & Matcha',
-    description:
-      'Brisbane\'s cosy anime cafe in Sunnybank. Custom latte art, matcha, manga and comfort food.',
+    description: 'A quiet anime cafe hidden upstairs in Market Square, Sunnybank.',
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-AU" className={`${nunito.variable} ${inter.variable}`}>
+    <html lang="en-AU" className={`${fraunces.variable} ${dmSans.variable}`}>
       <body>
         <Navigation />
-        <main className="min-h-screen">{children}</main>
+        <RevealInit />
+        <main>{children}</main>
         <Footer />
         <MobileStickyCTA />
       </body>
