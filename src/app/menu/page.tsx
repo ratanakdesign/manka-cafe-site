@@ -6,10 +6,16 @@ import { ImageFrame } from '@/components/ImageFrame'
 import { MENU_ITEMS, MENU_CATEGORIES } from '@/data/menu'
 
 export const metadata: Metadata = {
-  title: 'Menu | Manka Cafe Sunnybank — Latte Art, Matcha & Comfort Food',
+  title: 'Manka Cafe Menu | Sunnybank Anime Cafe',
   description:
-    'The Manka Cafe menu — custom 2D and 3D latte art, matcha drinks, Hong Kong-style French toast, sandwiches, chicken schnitzel, chicken tenders and comfort food. Order online or dine in at Market Square, Sunnybank.',
+    'View the Manka Cafe menu — custom latte art, Hong Kong-style French toast, sandwiches, coffee, iced drinks and comfort food. Order online or dine in at Market Square, Sunnybank.',
   alternates: { canonical: 'https://mankacafe.com.au/menu' },
+  openGraph: {
+    title: 'Manka Cafe Menu | Sunnybank Anime Cafe',
+    description: 'Custom latte art, Hong Kong-style French toast, sandwiches, coffee and comfort food above Market Square.',
+    url: 'https://mankacafe.com.au/menu',
+    images: [{ url: '/og/manka-cafe-og-image.jpg', width: 1200, height: 630 }],
+  },
 }
 
 const UBEREATS = 'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ'
