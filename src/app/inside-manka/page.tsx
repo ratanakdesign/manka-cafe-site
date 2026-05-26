@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
-import { ImageFrame } from '@/components/ImageFrame'
 
 export const metadata: Metadata = {
-  title: 'Inside Manka | The Space, the Shelves & the Art',
+  title: 'Inside Manka | Anime Mural, Manga Shelves & the Art Wall',
   description:
-    'What makes Manka Cafe what it is — the drawing wall, manga shelves, latte art and the quiet atmosphere above Market Square.',
+    'Explore what makes Manka Cafe in Sunnybank special — the full anime mural, manga shelves you can read from, a wall covered in customer drawings, and a quiet upstairs atmosphere.',
   alternates: { canonical: 'https://mankacafe.com.au/inside-manka' },
 }
 
@@ -15,65 +15,83 @@ export default function InsideMankaPage() {
   return (
     <>
       {/* ─── Header ───────────────────────────────────────────── */}
-      <div className="bg-ink pt-32 pb-16 lg:pt-40 lg:pb-20">
-        <div className="container">
-          <nav aria-label="Breadcrumb" className="text-sm text-stone/40 mb-6">
-            <Link href="/" className="hover:text-cream transition-colors">Home</Link>
-            <span className="mx-2 text-stone/20">/</span>
-            <span className="text-stone/60">Inside Manka</span>
-          </nav>
+      <section className="relative min-h-[60vh] flex items-end bg-ink">
+        <Image
+          src="/images/inside-manka/manka-cafe-full-anime-mural-wide.webp"
+          alt="The full anime mural at Manka Cafe, Sunnybank — a large hand-painted wall of Japanese anime characters"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-transparent" />
 
-          <div className="max-w-2xl">
+        <div className="relative w-full pb-14 lg:pb-20">
+          <div className="container">
+            <nav aria-label="Breadcrumb" className="text-sm text-cream/30 mb-5">
+              <Link href="/" className="hover:text-cream/60 transition-colors">Home</Link>
+              <span className="mx-2 text-cream/20">/</span>
+              <span className="text-cream/50">Inside Manka</span>
+            </nav>
             <h1
-              className="font-display font-bold text-cream text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-5 text-balance"
+              className="font-display font-bold text-cream text-4xl sm:text-5xl lg:text-6xl
+                         leading-[1.05] tracking-tight text-balance max-w-2xl"
               data-reveal
             >
               Inside Manka
             </h1>
-            <p className="text-stone text-lg leading-relaxed max-w-[46ch]" data-reveal data-delay="1">
-              A small cafe hidden on Level 1 of Market Square. Manga shelves, a wall covered in
-              customer drawings, soft music and latte art made to order.
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Intro ────────────────────────────────────────────── */}
+      <section className="bg-cream py-16 lg:py-20">
+        <div className="container">
+          <div className="max-w-2xl" data-reveal>
+            <p className="text-stone text-lg leading-relaxed">
+              A small cafe on Level 1 of Market Square. Manga shelves, a wall covered in years of
+              customer drawings, Ghibli piano in the background and latte art made at the counter.
+              Quiet enough to settle in. Different enough to remember.
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ─── The space ─────────────────────────────────────────── */}
-      <section className="bg-cream py-20 lg:py-28">
+      {/* ─── The mural ────────────────────────────────────────── */}
+      <section className="bg-parchment py-20 lg:py-28">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div data-reveal>
-              {/* TODO: Replace with wide interior shot — full cafe space, warm ambient light,
-                  showing both the shelves and the seating area. Daytime preferred. */}
-              <ImageFrame
-                aspect="4/3"
-                label="The cafe"
-                brief="Wide interior shot of Manka Cafe — seating area, warm ambient light, manga shelf visible on one wall. Conveys a cosy, quiet space."
-              />
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+                <Image
+                  src="/images/inside-manka/manka-cafe-anime-mural-seating-interior.jpg"
+                  alt="Seating area with anime mural at Manka Cafe, Sunnybank — tables in front of the large hand-painted wall"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
             </div>
 
             <div>
               <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
-                The space
+                The mural
               </p>
               <h2
                 className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-5 text-balance"
-                data-reveal
-                data-delay="1"
+                data-reveal data-delay="1"
               >
-                Quiet, small and easy to stay in
+                Hand-painted from wall to wall
               </h2>
               <div className="space-y-4 text-stone leading-relaxed" data-reveal data-delay="2">
                 <p>
-                  Manka is a small cafe. That&apos;s part of what makes it work. The tables are close
-                  enough to feel like you&apos;re somewhere, not just anywhere.
+                  The anime mural is the first thing you notice when you arrive. Characters painted
+                  across the full main wall — warm tones, detailed, the kind of thing that takes a
+                  moment to take in properly.
                 </p>
                 <p>
-                  The music stays in the background — Studio Ghibli soundtracks, lofi, game OSTs.
-                  Soft enough to think. Familiar enough to notice if you listen.
-                </p>
-                <p>
-                  Most people come for the latte art and stay longer than they planned.
+                  It sets the tone for the whole space: carefully made, a little unusual, and
+                  worth looking at more than once.
                 </p>
               </div>
             </div>
@@ -81,33 +99,30 @@ export default function InsideMankaPage() {
         </div>
       </section>
 
-      {/* ─── The drawing wall ─────────────────────────────────── */}
-      <section className="bg-parchment py-20 lg:py-28">
+      {/* ─── Customer art wall ────────────────────────────────── */}
+      <section className="bg-cream py-20 lg:py-28">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
             <div>
               <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
                 The drawing wall
               </p>
               <h2
                 className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-5 text-balance"
-                data-reveal
-                data-delay="1"
+                data-reveal data-delay="1"
               >
                 Customers have drawn directly on our walls for years
               </h2>
               <div className="space-y-4 text-stone leading-relaxed" data-reveal data-delay="2">
                 <p>
-                  It started as one wall. Now it&apos;s grown. Characters, quotes, little scenes —
-                  all drawn by people who visited and wanted to leave something behind.
+                  It started as one wall. Now it covers more than that. Characters, little scenes,
+                  messages — all drawn by people who wanted to leave something behind.
                 </p>
                 <p>
-                  There are drawings from regulars who come every week and drawings from people
-                  who were here once. Every visit, there&apos;s something new to spot.
+                  There are drawings from regulars who come every week and from people who were
+                  here just once. Every visit, there&apos;s something new to spot.
                 </p>
               </div>
-
               <div className="mt-8" data-reveal data-delay="3">
                 <a
                   href={INSTAGRAM}
@@ -115,37 +130,47 @@ export default function InsideMankaPage() {
                   rel="noopener noreferrer"
                   className="btn btn-ghost text-brown"
                 >
-                  See our Instagram for more
+                  See more on Instagram
                   <span className="btn-arrow" aria-hidden="true">&rarr;</span>
                 </a>
               </div>
             </div>
 
-            <div data-reveal data-delay="2">
-              {/* TODO: Replace with close-up of drawing wall — character art, dense and
-                  characterful, warm light. Could be two photos tiled vertically. */}
-              <ImageFrame
-                aspect="3/4"
-                label="The drawing wall"
-                brief="Close-up of the customer drawing wall — anime characters, warm tones, dense with art. Intimate and characterful."
-              />
+            <div className="grid grid-cols-2 gap-3" data-reveal data-delay="2">
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden">
+                <Image
+                  src="/images/inside-manka/manka-cafe-customer-art-wall-corner.webp"
+                  alt="Customer art wall corner at Manka Cafe — a wall dense with hand-drawn anime characters and visitor messages"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 50vw, 25vw"
+                />
+              </div>
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mt-8">
+                <Image
+                  src="/images/inside-manka/manka-cafe-customer-whiteboard-art-panels.jpg"
+                  alt="Customer whiteboard art panels at Manka Cafe — whiteboard panels filled with anime character drawings"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 50vw, 25vw"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ─── Manga shelves ────────────────────────────────────── */}
-      <section className="bg-cream py-20 lg:py-28">
+      <section className="bg-ink py-20 lg:py-28">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-            <div data-reveal>
-              {/* TODO: Replace with manga shelf photo — spines facing out, organised, warm.
-                  A hand reaching for a volume works well here. */}
-              <ImageFrame
-                aspect="4/3"
-                label="The manga shelf"
-                brief="Manga shelf — colourful spines, warm ambient light, someone browsing. Inviting and relaxed."
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden" data-reveal>
+              <Image
+                src="/images/inside-manka/manka-cafe-manga-bookshelf-mural-detail.webp"
+                alt="Manga bookshelf at Manka Cafe, Sunnybank — shelves of manga volumes with the anime mural painted behind"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
 
@@ -154,11 +179,10 @@ export default function InsideMankaPage() {
                 Manga shelves
               </p>
               <h2
-                className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-5 text-balance"
-                data-reveal
-                data-delay="1"
+                className="font-display font-bold text-cream text-3xl sm:text-4xl leading-tight mb-5 text-balance"
+                data-reveal data-delay="1"
               >
-                Browse while you wait, or settle in for an afternoon
+                Browse while you wait. Or settle in for the afternoon.
               </h2>
               <div className="space-y-4 text-stone leading-relaxed" data-reveal data-delay="2">
                 <p>
@@ -166,65 +190,57 @@ export default function InsideMankaPage() {
                   through. First-timers tend to pick something familiar.
                 </p>
                 <p>
-                  It&apos;s one of the things that makes Manka easy to stay in. A drink, something to
-                  read, music in the background. No rush.
+                  A warm drink, something to read, soft music in the background. No rush.
                 </p>
               </div>
+              <blockquote className="border-l-2 border-stone/20 pl-4 mt-6" data-reveal data-delay="3">
+                <p className="review-quote text-base text-cream/80">
+                  &ldquo;The matcha latte was super good. I ended up reading a whole volume of manga.&rdquo;
+                </p>
+                <footer className="review-source mt-2">Google review</footer>
+              </blockquote>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── Latte art ────────────────────────────────────────── */}
-      <section className="bg-ink py-20 lg:py-28">
+      {/* ─── Lounge & atmosphere ──────────────────────────────── */}
+      <section className="bg-parchment py-20 lg:py-28">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
             <div>
               <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
-                Latte art
+                The atmosphere
               </p>
               <h2
-                className="font-display font-bold text-cream text-3xl sm:text-4xl leading-tight mb-5 text-balance"
-                data-reveal
-                data-delay="1"
+                className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-5 text-balance"
+                data-reveal data-delay="1"
               >
-                Made at the counter, different every time
+                Quiet, upstairs, away from the Market Square rush
               </h2>
               <div className="space-y-4 text-stone leading-relaxed" data-reveal data-delay="2">
                 <p>
-                  The 3D milk foam characters are the thing people talk about most. Small sculpted
-                  figures placed directly on top of your latte. Each one is a little different.
+                  The music stays in the background — Studio Ghibli soundtracks, lofi, the occasional
+                  game OST. Always soft. Never loud.
                 </p>
                 <p>
-                  There are also 2D drawn lattes, print art options and custom photo prints
-                  arranged in advance. All made on warm espresso drinks, best enjoyed in-house.
+                  The lounge area has a wall of sticky notes left by visitors. Small messages, drawings,
+                  dates people visited with. A kind of quiet record of everyone who&apos;s been here.
                 </p>
               </div>
-
-              <div className="mt-8 flex flex-wrap gap-3" data-reveal data-delay="3">
-                <Link href="/menu" className="btn btn-outline border-cream/20 text-cream hover:bg-cream hover:text-ink">
-                  See latte art options
-                </Link>
-                <a
-                  href={INSTAGRAM}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-ghost text-stone hover:text-cream"
-                >
-                  DM for custom orders
-                  <span className="btn-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-              </div>
+              <blockquote className="border-l-2 border-parchment/60 pl-4 mt-6" data-reveal data-delay="3">
+                <p className="review-quote text-base">&ldquo;Calming atmosphere with Ghibli piano playing.&rdquo;</p>
+                <footer className="review-source mt-2">Google review</footer>
+              </blockquote>
             </div>
 
-            <div data-reveal data-delay="2">
-              {/* TODO: Replace with 3D latte art photo — close-up, warm light, character
-                  clearly visible, cup in hand or on table. */}
-              <ImageFrame
-                aspect="4/5"
-                label="3D latte art"
-                brief="3D milk foam character sitting on a latte — close up, warm light, cute character detail clearly visible."
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden" data-reveal data-delay="2">
+              <Image
+                src="/images/inside-manka/manka-cafe-lounge-area-sticky-note-wall.webp"
+                alt="Lounge area at Manka Cafe with sticky note wall — a relaxed seating corner with colourful visitor sticky notes"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
           </div>
@@ -232,7 +248,7 @@ export default function InsideMankaPage() {
       </section>
 
       {/* ─── CTA ──────────────────────────────────────────────── */}
-      <section className="bg-parchment py-20 lg:py-28">
+      <section className="bg-cream py-20 lg:py-28">
         <div className="container">
           <div className="max-w-xl" data-reveal>
             <h2 className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight mb-4 text-balance">
@@ -243,12 +259,8 @@ export default function InsideMankaPage() {
               Closed Tuesdays.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/visit" className="btn btn-primary">
-                Plan your visit
-              </Link>
-              <Link href="/menu" className="btn btn-outline">
-                See the menu
-              </Link>
+              <Link href="/visit" className="btn btn-primary">Plan your visit</Link>
+              <Link href="/menu" className="btn btn-outline">See the menu</Link>
             </div>
           </div>
         </div>

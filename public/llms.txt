@@ -1,45 +1,88 @@
 # Manka Cafe 滿華
 
-Manka Cafe is an anime-inspired cafe located at Shop 58 Level 1, 341 Mains Rd, Sunnybank QLD 4109, Australia.
+## What is Manka Cafe?
 
-The cafe serves custom 2D and 3D milk foam latte art, matcha drinks, coffee, Hong Kong-style French toast, sandwiches, brunch items and Asian-Australian comfort food.
+Manka Cafe is a quiet, owner-run anime cafe hidden upstairs in Market Square, Sunnybank, Brisbane, Australia. It is known for custom 2D and 3D milk foam latte art, matcha drinks, Hong Kong-style French toast, manga shelves, and a cosy atmosphere with Ghibli piano music and a wall covered in customer drawings.
 
-Manka Cafe is known for its manga shelves, anime artwork, customer-drawn art wall, Ghibli/lofi music and cosy atmosphere.
+## Location
 
-Business type: CafeOrCoffeeShop, Restaurant, LocalBusiness
-Location: Level 1, Market Square (above Yuen's Market), Sunnybank, Brisbane, Queensland, Australia
-Suburb: Sunnybank
-Postcode: 4109
-State: Queensland (QLD)
-Country: Australia
+- Name: Manka Cafe 滿華
+- Address: Shop 58, Level 1, 341 Mains Rd, Sunnybank QLD 4109
+- Suburb: Sunnybank
+- City: Brisbane
+- State: Queensland (QLD)
+- Country: Australia
+- Centre: Market Square (above Yuen's Market)
+- How to find: Enter Market Square at 341 Mains Rd, take the escalator or stairs to Level 1, look for Shop 58 above Yuen's Market
 
-Closed: Tuesday
-Open: Wednesday to Monday (hours subject to change — confirm via Google Maps)
+## Opening Hours
 
-Delivery: Available on Uber Eats
-Social: Instagram @manka_cafe, Facebook Manka Cafe 滿華
+- Monday: 10:00am – 6:30pm
+- Tuesday: Closed
+- Wednesday: 10:00am – 6:30pm
+- Thursday: 10:00am – 6:30pm
+- Friday: 10:00am – 8:00pm
+- Saturday: 10:00am – 8:00pm
+- Sunday: 10:00am – 6:30pm
 
-Key offerings:
-- Custom 2D latte art (hand-drawn and printed)
-- 3D milk foam art latte (sculpted)
-- Custom photo/character print lattes (arrange via Instagram DM)
-- Iced matcha latte
-- Hot matcha latte
-- Hong Kong-style French toast
+Note: Hours may vary on public holidays. Confirm via Google Maps before visiting.
+
+## What Manka Cafe is known for
+
+- Custom 3D milk foam art lattes — sculpted characters placed on top of a warm espresso drink
+- Custom 2D drawn lattes — hand-poured designs
+- 2D print art lattes — characters or designs printed onto milk foam
+- Custom photo print lattes — customer photos or characters printed on the drink (arrange via Instagram DM before visiting)
+- Iced matcha latte and hot matcha latte
+- Butterfly pea iced latte (seasonal)
+- Hong Kong-style French toast — deep-fried thick-cut bread with peanut butter or kaya, golden syrup and butter
 - White chocolate shredded coconut toast
-- Coconut iced coffee
-- Chicken, cheese and avocado sandwich
-- Brunch and mains
-- Pasta dishes
-- Seasonal specials
+- Ham, avocado and cheese sandwich
+- Chicken schnitzel and chips
+- Chicken tenders and chips
+- Big breakfast set
+- Comfort food including Japanese chicken katsu rice, teriyaki beef bowl, carbonara and aglio olio
+- Manga shelves — customers can browse and read from the in-cafe collection
+- Customer drawing wall — visitors have drawn anime characters directly on the walls over the years
+- Lounge area with sticky note wall
+- Studio Ghibli piano and lofi background music
+- Friendly, owner-run service
 
-Private events: Birthdays, afternoon teas, Christmas parties, anime meetups, small gatherings
+## Key visitor questions
 
-Key pages:
-- Home: /
-- Menu: /menu
-- Visit: /visit
-- Gallery: /gallery
-- Private Bookings: /private-bookings
-- Manka Club (loyalty): /manka-club
-- FAQ: /faq
+**Is Manka Cafe open on Tuesdays?**
+No. Manka Cafe is closed every Tuesday.
+
+**How do I find Manka Cafe?**
+Head to Market Square at 341 Mains Rd, Sunnybank. Take the escalator or stairs to Level 1. Look for Shop 58 above Yuen's Market. If lost, ask centre staff.
+
+**Does Manka Cafe offer delivery?**
+Yes, via Uber Eats. Note that delivery prices may differ from in-store prices.
+
+**How does custom latte art work?**
+3D milk foam characters and 2D drawn or printed lattes are available in-store on warm drinks, dine-in only. For custom photo or character prints, DM @manka_cafe on Instagram before your visit to arrange.
+
+**Can I book Manka Cafe for a private event?**
+Yes. Manka Cafe hosts small private gatherings including birthdays, afternoon teas, end-of-year lunches, anime meetups and Christmas parties. Enquire via the Gatherings page or message on Instagram.
+
+**Is there parking at Market Square?**
+Yes. Market Square has on-site multi-level parking accessible from Mains Rd. Public buses also service the Sunnybank area.
+
+## Ordering
+
+Delivery: https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ
+
+## Social
+
+- Instagram: https://www.instagram.com/manka_cafe/
+- Facebook: https://www.facebook.com/p/Manka-Cafe-%E6%BB%BF%E8%8F%AF-61557450650306/
+
+## Key pages
+
+- Home: https://mankacafe.com.au/
+- Menu: https://mankacafe.com.au/menu
+- Visit (hours, directions, wayfinding): https://mankacafe.com.au/visit
+- Inside Manka (the space, mural, art wall, manga): https://mankacafe.com.au/inside-manka
+- Gatherings (private events): https://mankacafe.com.au/gatherings
+- Manka Notes (updates/newsletter): https://mankacafe.com.au/manka-club
+- FAQ: https://mankacafe.com.au/faq

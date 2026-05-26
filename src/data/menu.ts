@@ -6,9 +6,12 @@ export interface MenuItem {
   price?: string
   note?: string
   featured?: boolean
+  image?: string
+  imageAlt?: string
 }
 
 export const MENU_CATEGORIES = [
+  'Popular at Manka',
   'Latte Art Drinks',
   'Matcha, Coffee & Tea',
   'Iced Drinks',
@@ -18,6 +21,68 @@ export const MENU_CATEGORIES = [
 ]
 
 export const MENU_ITEMS: MenuItem[] = [
+  // Popular at Manka — curated cross-category highlights
+  {
+    id: 'popular-latte-art',
+    name: '3D Milk Foam Art Latte',
+    category: 'Popular at Manka',
+    description: 'A sculpted milk foam character on your latte. Made by hand, different every time. The reason most people first visit Manka.',
+    price: 'From $9',
+    featured: true,
+    image: '/images/latte-art/manka-cafe-rose-latte-hot.jpg',
+    imageAlt: 'Latte art at Manka Cafe — a warm espresso drink with a beautiful hand-crafted rose design in steamed milk foam',
+  },
+  {
+    id: 'popular-hk-toast',
+    name: 'Hong Kong Style French Toast',
+    category: 'Popular at Manka',
+    description: 'Deep-fried thick-cut bread with peanut butter or kaya, golden syrup and butter. A HK café classic — and the first thing regulars reorder.',
+    price: 'From $14',
+    featured: true,
+    image: '/images/menu/manka-cafe-hong-kong-french-toast-butter.jpg',
+    imageAlt: 'Hong Kong-style French toast at Manka Cafe — golden deep-fried bread with peanut butter, drizzled with golden syrup and served with butter',
+  },
+  {
+    id: 'popular-butterfly-pea-latte',
+    name: 'Iced Butterfly Pea Latte',
+    category: 'Popular at Manka',
+    description: 'A layered iced drink with butterfly pea tea and milk. Striking to look at, subtly floral to drink. Ask about seasonal availability.',
+    featured: true,
+    image: '/images/latte-art/manka-cafe-iced-layered-butterfly-pea-latte.jpg',
+    imageAlt: 'Iced butterfly pea layered latte at Manka Cafe — a visually striking purple-to-cream layered iced drink in a clear cup',
+    note: 'Seasonal — check availability in-store',
+  },
+  {
+    id: 'popular-ham-avo-sandwich',
+    name: 'Ham, Avocado & Cheese Sandwich',
+    category: 'Popular at Manka',
+    description: 'Grilled ham, melted cheese and fresh avocado on toasted bread. One of the top-ordered items on Uber Eats.',
+    price: 'From $16',
+    featured: true,
+    image: '/images/menu/manka-cafe-ham-avocado-grilled-sandwich.jpg',
+    imageAlt: 'Ham, avocado and cheese grilled sandwich at Manka Cafe — toasted bread with melted cheese, ham and fresh avocado',
+  },
+  {
+    id: 'popular-chicken-schnitzel',
+    name: 'Chicken Schnitzel & Chips',
+    category: 'Popular at Manka',
+    description: 'Crumbed chicken breast with golden chips. Satisfying, simple and a reliable crowd-pleaser.',
+    price: 'From $19',
+    featured: true,
+    image: '/images/menu/manka-cafe-chicken-schnitzel-chips.jpg',
+    imageAlt: 'Chicken schnitzel with chips at Manka Cafe — golden crumbed chicken breast served with crispy chips',
+  },
+  {
+    id: 'popular-chicken-tenders',
+    name: 'Chicken Tenders & Chips',
+    category: 'Popular at Manka',
+    description: 'Crispy chicken tenders with chips and a side salad. A consistent favourite for dine-in and delivery.',
+    price: 'From $18',
+    featured: true,
+    image: '/images/archive/manka-cafe-chicken-tenders-chips-salad.jpg',
+    imageAlt: 'Chicken tenders with chips and salad at Manka Cafe — golden crispy chicken tenders with fries and a small side salad',
+  },
+
   // Latte Art Drinks
   {
     id: 'latte-3d-foam',
@@ -170,6 +235,24 @@ export const MENU_ITEMS: MenuItem[] = [
   },
 
   // Comfort Food
+  {
+    id: 'chicken-schnitzel',
+    name: 'Chicken Schnitzel & Chips',
+    category: 'Comfort Food',
+    description: 'Crumbed chicken breast with golden chips. Satisfying and simple.',
+    price: 'From $19',
+    image: '/images/menu/manka-cafe-chicken-schnitzel-chips.jpg',
+    imageAlt: 'Chicken schnitzel with chips at Manka Cafe',
+  },
+  {
+    id: 'chicken-tenders',
+    name: 'Chicken Tenders & Chips',
+    category: 'Comfort Food',
+    description: 'Crispy chicken tenders with chips and a side salad.',
+    price: 'From $18',
+    image: '/images/archive/manka-cafe-chicken-tenders-chips-salad.jpg',
+    imageAlt: 'Chicken tenders with chips and salad at Manka Cafe',
+  },
   {
     id: 'chicken-katsu',
     name: 'Japanese Chicken Katsu Rice',
