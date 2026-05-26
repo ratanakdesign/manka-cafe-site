@@ -90,43 +90,44 @@ const WHY_COME_BACK = [
 const ORDER_ITEMS = [
   {
     name: '3D or 2D Latte Art',
-    desc: 'Warm drink, made by hand. Ask what\'s available on the day.',
-    price: 'From $7',
+    desc: 'Sculpted foam characters or hand-drawn designs on your latte. Ask in-store for the day\'s options.',
     image: '/images/latte-art/manka-cafe-rose-latte-hot.jpg',
-    alt: 'Latte art at Manka Cafe — rose design in steamed milk foam',
+    alt: 'Rose latte art at Manka Cafe — a warm espresso drink with a hand-crafted rose design in steamed milk foam',
   },
   {
-    name: 'HK French Toast',
-    desc: 'Peanut butter or kaya, golden syrup, butter. The most reordered item.',
-    price: 'From $14',
+    name: 'Hong Kong Style French Toast',
+    desc: 'Toast with egg, butter, maple syrup and peanut. The most-reordered item.',
+    price: '$15',
     image: '/images/menu/manka-cafe-hong-kong-french-toast-butter.jpg',
-    alt: 'Hong Kong-style French toast at Manka Cafe',
+    alt: 'Hong Kong-style French toast at Manka Cafe — golden toast with peanut butter and maple syrup',
   },
   {
-    name: 'Iced Butterfly Pea Latte',
-    desc: 'Layered, visually striking, subtly floral. Seasonal — check availability.',
-    image: '/images/latte-art/manka-cafe-iced-layered-butterfly-pea-latte.jpg',
-    alt: 'Iced butterfly pea latte at Manka Cafe — a layered purple-to-cream iced drink',
+    name: 'Chicken, Cheese & Avocado Sandwich',
+    desc: 'Served with mayonnaise. No. 1 most-liked item on Uber Eats.',
+    price: '$15',
+    image: '/images/menu/manka-cafe-takeaway-sandwich-packaged.jpg',
+    alt: 'Packaged sandwich at Manka Cafe, Sunnybank',
   },
   {
-    name: 'Ham, Avo & Cheese Sandwich',
-    desc: 'Grilled on toasted bread. Top-ordered on Uber Eats.',
-    price: 'From $16',
-    image: '/images/menu/manka-cafe-ham-avocado-grilled-sandwich.jpg',
-    alt: 'Grilled ham, avocado and cheese sandwich at Manka Cafe',
+    name: 'Coconut Iced Coffee',
+    desc: 'No. 2 most-liked on Uber Eats. A reliable choice.',
+    price: '$9.80',
+    image: '/images/menu/manka-cafe-iced-latte.jpg',
+    alt: 'Iced coffee at Manka Cafe, Sunnybank',
   },
   {
-    name: 'Chicken Schnitzel & Chips',
-    desc: 'Crumbed chicken, golden chips. A crowd-pleaser.',
-    price: 'From $19',
-    image: '/images/menu/manka-cafe-chicken-schnitzel-chips.jpg',
-    alt: 'Chicken schnitzel and chips at Manka Cafe',
+    name: 'Fried Chicken Tender Set',
+    desc: 'Crispy tenders — original or spicy. With fries and fresh vegetables.',
+    price: '$30.30',
+    image: '/images/archive/manka-cafe-chicken-tenders-chips-salad.jpg',
+    alt: 'Fried chicken tenders with chips and salad at Manka Cafe, Sunnybank',
   },
   {
-    name: 'Manga & the atmosphere',
-    desc: 'Browse the shelves. Read something. There\'s no rush.',
-    image: '/images/inside-manka/manka-cafe-manga-shelf-customer-art-wall.jpg',
-    alt: 'Manga shelf and customer art wall at Manka Cafe, Sunnybank',
+    name: 'Big Breakfast',
+    desc: 'Toast, scrambled eggs, bacon, beef sausage, tomato beans and ice cream.',
+    price: '$29.77',
+    image: '/images/menu/manka-cafe-big-breakfast-set.jpg',
+    alt: 'Big breakfast set at Manka Cafe, Sunnybank',
   },
 ]
 
@@ -195,8 +196,30 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── Manka Through Their Eyes (video) ────────────────────── */}
+      <section className="bg-parchment py-20 lg:py-28 overflow-hidden">
+        <div className="container mb-10">
+          <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
+            Featured by creators
+          </p>
+          <h2
+            className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight text-balance max-w-lg mb-3"
+            data-reveal data-delay="1"
+          >
+            Manka Through Their Eyes
+          </h2>
+          <p className="text-stone text-base max-w-[50ch]" data-reveal data-delay="2">
+            Local creators and visitors sharing the latte art, manga shelves and cosy upstairs atmosphere.
+          </p>
+        </div>
+
+        <div className="container" data-reveal data-delay="3">
+          <SocialVideoCarousel />
+        </div>
+      </section>
+
       {/* ─── Review strip ─────────────────────────────────────── */}
-      <section className="bg-parchment py-12 lg:py-16">
+      <section className="bg-cream py-12 lg:py-16">
         <div className="container">
           <div className="grid sm:grid-cols-3 gap-8 lg:gap-14">
             {REVIEWS.map((r, i) => (
@@ -436,29 +459,6 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ─── Manka Through Their Eyes ─────────────────────────── */}
-      <section className="bg-parchment py-20 lg:py-28 overflow-hidden">
-        <div className="container mb-10">
-          <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
-            Featured by creators
-          </p>
-          <h2
-            className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight text-balance max-w-lg mb-3"
-            data-reveal data-delay="1"
-          >
-            Manka Through Their Eyes
-          </h2>
-          <p className="text-stone text-base max-w-[50ch]" data-reveal data-delay="2">
-            See how local creators and visitors have captured the latte art, manga shelves
-            and cosy upstairs atmosphere.
-          </p>
-        </div>
-
-        <div className="container" data-reveal data-delay="3">
-          <SocialVideoCarousel />
         </div>
       </section>
 

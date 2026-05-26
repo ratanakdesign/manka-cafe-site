@@ -1,16 +1,19 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const NAV = [
-  { href: '/menu',          label: 'Menu' },
-  { href: '/visit',         label: 'Visit' },
-  { href: '/inside-manka',  label: 'Inside Manka' },
-  { href: '/gatherings',    label: 'Gatherings' },
-  { href: '/manka-club',    label: 'Manka Notes' },
+  { href: '/menu',       label: 'Menu' },
+  { href: '/visit',      label: 'Visit' },
+  { href: '/gatherings', label: 'Gatherings' },
+  { href: '/manka-club', label: 'Manka Notes' },
 ]
+
+// Pages that open with a full-bleed dark image — nav needs light text when unscrolled
+const DARK_HERO_PAGES = ['/', '/gatherings', '/inside-manka']
 
 const UBEREATS = 'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ'
 
@@ -18,6 +21,8 @@ export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled]  = useState(false)
   const pathname = usePathname()
+
+  const isLight = !scrolled && !menuOpen && DARK_HERO_PAGES.includes(pathname)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -27,7 +32,6 @@ export default function Navigation() {
 
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
-  // Prevent body scroll while mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -41,19 +45,31 @@ export default function Navigation() {
         scrolled || menuOpen
           ? 'bg-cream/95 backdrop-blur-sm shadow-[0_1px_0_0_rgba(28,21,18,0.07)]'
           : 'bg-transparent',
+        isLight ? 'nav-header-light' : '',
       ].join(' ')}
     >
       <div className="container">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/" className="group flex items-baseline gap-2 flex-shrink-0">
-            <span className="font-display font-bold text-ink text-base leading-none
-                             group-hover:text-brown transition-colors duration-150">
+          <Link href="/" className="group flex items-center gap-2.5 flex-shrink-0">
+            <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-black/10">
+              <Image
+                src="/images/hero/manka-cafe-logo-circular.jpg"
+                alt="Manka Cafe logo"
+                fill
+                className="object-cover"
+                sizes="36px"
+                priority
+              />
+            </div>
+            <span className={[
+              'font-display font-bold text-base leading-none transition-colors duration-150',
+              isLight
+                ? 'text-cream group-hover:text-cream/80'
+                : 'text-ink group-hover:text-brown',
+            ].join(' ')}>
               Manka Cafe
-            </span>
-            <span className="text-stone/50 text-xs font-body leading-none select-none">
-              滿華
             </span>
           </Link>
 
@@ -76,7 +92,10 @@ export default function Navigation() {
               href={UBEREATS}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-outline text-xs py-2 px-4"
+              className={[
+                'btn btn-outline text-xs py-2 px-4',
+                isLight ? 'border-cream/40 text-cream hover:bg-cream hover:text-ink hover:border-cream' : '',
+              ].join(' ')}
             >
               Order online
             </a>
@@ -85,9 +104,12 @@ export default function Navigation() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px]
-                       text-ink focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2
-                       rounded-lg focus-visible:outline-none"
+            className={[
+              'lg:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px]',
+              'focus-visible:ring-2 focus-visible:ring-brown focus-visible:ring-offset-2',
+              'rounded-lg focus-visible:outline-none',
+              isLight ? 'text-cream' : 'text-ink',
+            ].join(' ')}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
           >

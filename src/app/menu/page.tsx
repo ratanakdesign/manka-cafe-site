@@ -59,8 +59,8 @@ export default function MenuPage() {
             Menu
           </h1>
           <p className="text-stone text-lg max-w-[46ch] mb-6" data-reveal data-delay="1">
-            Custom latte art, matcha, Hong Kong-style French toast and comfort food.
-            Prices shown are in-store — delivery platform prices may differ.
+            Custom latte art, Hong Kong-style French toast, sandwiches, comfort food and more.
+            Prices shown are from our delivery menu — in-store prices may differ.
           </p>
           <div className="flex gap-3 flex-wrap" data-reveal data-delay="2">
             <a href={UBEREATS} target="_blank" rel="noopener noreferrer" className="btn btn-primary">

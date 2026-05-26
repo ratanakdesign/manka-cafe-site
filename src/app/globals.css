@@ -225,6 +225,18 @@
   @apply w-full;
 }
 
+/* ─── Nav on dark-hero pages ─────────────────────────────────── */
+.nav-header-light .nav-link {
+  color: rgba(245, 239, 230, 0.75);
+}
+.nav-header-light .nav-link:hover,
+.nav-header-light .nav-link.is-active {
+  color: rgb(245, 239, 230);
+}
+.nav-header-light .nav-link::after {
+  background-color: rgb(245, 239, 230);
+}
+
 /* ─── Wayfinding steps ───────────────────────────────────────── */
 .wayfind-step {
   @apply relative flex items-start gap-4 py-4;
