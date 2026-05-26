@@ -109,11 +109,10 @@ const ORDER_ITEMS = [
     alt: 'Packaged sandwich at Manka Cafe, Sunnybank',
   },
   {
-    name: 'Coconut Iced Coffee',
-    desc: 'No. 2 most-liked on Uber Eats. A reliable choice.',
-    price: '$9.80',
-    image: '/images/menu/manka-cafe-iced-latte.jpg',
-    alt: 'Iced coffee at Manka Cafe, Sunnybank',
+    name: 'Iced Matcha Latte',
+    desc: 'Strong matcha flavour, frequently praised in reviews. Ask in-store for availability.',
+    image: '/images/menu/manka-cafe-matcha.png',
+    alt: 'Iced matcha latte at Manka Cafe, Sunnybank — bright green matcha with ice',
   },
   {
     name: 'Fried Chicken Tender Set',

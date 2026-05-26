@@ -52,6 +52,8 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'Popular at Manka',
     description: 'Strong matcha flavour, frequently praised in reviews. Ask in-store for pricing and availability.',
     note: 'Confirm availability and price in-store.',
+    image: '/images/menu/manka-cafe-matcha.png',
+    imageAlt: 'Iced matcha latte at Manka Cafe, Sunnybank — bright green matcha with ice',
     featured: true,
   },
   {
