@@ -92,7 +92,7 @@ const ORDER_ITEMS = [
   {
     name: '3D or 2D Latte Art',
     desc: 'Sculpted foam characters or hand-drawn designs on your latte. Ask in-store for the day\'s options.',
-    image: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg',
+    image: '/images/latte-art/manka-cafe-2d-foam-latte-art.png',
     alt: '2D foam latte art at Manka Cafe in Sunnybank',
   },
   {
