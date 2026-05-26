@@ -31,8 +31,8 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'Popular at Manka',
     description: 'Sculpted milk foam characters or hand-drawn designs on your latte. Made at the counter, different every time. The reason most people first visit Manka.',
     note: 'Dine-in only. Ask in-store for current designs and pricing.',
-    image: '/images/latte-art/manka-cafe-rose-latte-hot.jpg',
-    imageAlt: 'Rose latte art at Manka Cafe — a warm espresso drink with a hand-crafted rose design in steamed milk foam, Sunnybank',
+    image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg',
+    imageAlt: '3D bear milk foam latte art at Manka Cafe in Sunnybank — a sculpted white bear character sitting in a warm drink on a ceramic saucer',
     featured: true,
   },
   {

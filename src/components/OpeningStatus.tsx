@@ -15,18 +15,18 @@ export default function OpeningStatus() {
   if (!status) return null
 
   return (
-    <span className="inline-flex items-center gap-2 text-sm">
+    <span className="inline-flex items-center gap-2 text-sm bg-cream/95 text-ink px-3 py-1.5 rounded-full backdrop-blur-sm shadow-sm">
       <span
         className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-          status.isOpen ? 'bg-green-500' : 'bg-stone/40'
+          status.isOpen ? 'bg-green-600' : 'bg-stone/60'
         }`}
         aria-hidden="true"
       />
-      <span className={status.isOpen ? 'text-ink' : 'text-stone'}>
+      <span className="font-medium">
         {status.label}
       </span>
       {status.sublabel && (
-        <span className="text-stone/60">&middot; {status.sublabel}</span>
+        <span className="text-stone">&middot; {status.sublabel}</span>
       )}
     </span>
   )

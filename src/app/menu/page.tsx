@@ -183,10 +183,10 @@ export default function MenuPage() {
 
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden" data-reveal data-delay="2">
               <Image
-                src="/images/latte-art/manka-cafe-rose-latte-hot.jpg"
-                alt="2D rose latte art at Manka Cafe — a warm espresso drink with a hand-crafted rose design in steamed milk foam, Sunnybank"
+                src="/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg"
+                alt="3D bear milk foam latte art at Manka Cafe in Sunnybank — a sculpted white bear character in a warm drink on a ceramic saucer"
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>

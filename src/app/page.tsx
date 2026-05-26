@@ -64,8 +64,8 @@ const WHY_COME_BACK = [
   {
     heading: 'Custom latte art, made at the counter',
     body: 'The 3D milk foam characters are the thing people talk about most. Sculpted on top of your latte, different each time. There are also 2D drawn lattes and print options.',
-    image: '/images/latte-art/manka-cafe-rose-latte-hot.jpg',
-    imageAlt: 'Hand-crafted rose latte art at Manka Cafe — a warm espresso drink with a beautifully drawn rose in steamed milk foam',
+    image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg',
+    imageAlt: '3D bear milk foam latte art at Manka Cafe in Sunnybank — a sculpted white bear character sitting in a warm drink on a ceramic saucer',
   },
   {
     heading: 'Manga you can actually read',
@@ -91,8 +91,8 @@ const ORDER_ITEMS = [
   {
     name: '3D or 2D Latte Art',
     desc: 'Sculpted foam characters or hand-drawn designs on your latte. Ask in-store for the day\'s options.',
-    image: '/images/latte-art/manka-cafe-rose-latte-hot.jpg',
-    alt: 'Rose latte art at Manka Cafe — a warm espresso drink with a hand-crafted rose design in steamed milk foam',
+    image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg',
+    alt: '3D bear milk foam latte art at Manka Cafe in Sunnybank — a sculpted white bear sitting in a warm drink on a ceramic saucer',
   },
   {
     name: 'Hong Kong Style French Toast',
@@ -206,10 +206,10 @@ export default function HomePage() {
             className="font-display font-bold text-ink text-3xl sm:text-4xl leading-tight text-balance max-w-lg mb-3"
             data-reveal data-delay="1"
           >
-            Manka Through Their Eyes
+            See Manka before you visit
           </h2>
           <p className="text-stone text-base max-w-[50ch]" data-reveal data-delay="2">
-            Local creators and visitors sharing the latte art, manga shelves and cosy upstairs atmosphere.
+            Watch the latte art, food and cosy upstairs space through the clips people are already sharing.
           </p>
         </div>
 
@@ -377,10 +377,10 @@ export default function HomePage() {
 
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden" data-reveal data-delay="2">
               <Image
-                src="/images/latte-art/manka-cafe-iced-layered-butterfly-pea-latte.jpg"
-                alt="Iced layered butterfly pea latte at Manka Cafe — a visually striking purple and cream layered iced drink, Sunnybank"
+                src="/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg"
+                alt="3D bear milk foam latte art at Manka Cafe in Sunnybank — a sculpted white bear character sitting in a warm drink on a ceramic saucer"
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
