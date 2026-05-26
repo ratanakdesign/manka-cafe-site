@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         ink:          '#1C1512',
+        coffee:       '#392209',
         'brown-deep': '#3D2314',
         brown:        '#6B4226',
         stone:        '#9E9388',

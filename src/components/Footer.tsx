@@ -23,7 +23,7 @@ function fmt(t: string) {
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-cream/70">
+    <footer className="bg-coffee text-cream/70">
       <div className="container py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
 

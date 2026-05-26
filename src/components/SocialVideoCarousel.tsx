@@ -190,16 +190,15 @@ function VideoCard({ video }: { video: SocialVideo }) {
 }
 
 export default function SocialVideoCarousel() {
+  const featured = SOCIAL_VIDEOS.slice(0, 3)
   return (
     // Mobile: horizontal snap scroll — each card is ~260px wide
-    // Desktop (lg+): 4-column CSS grid, no scroll
+    // Desktop (lg+): 3-column CSS grid, no scroll
     <div className="overflow-x-auto lg:overflow-visible -mx-5 sm:-mx-8 lg:mx-0 px-5 sm:px-8 lg:px-0 pb-4 lg:pb-0 scrollbar-hide">
-      <div className="flex gap-5 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:gap-6 lg:snap-none"
+      <div className="flex gap-5 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:gap-6 lg:snap-none"
            style={{ minWidth: 'max-content' }}
-           // minWidth max-content lets flex children overflow on mobile for horizontal scroll;
-           // the lg:grid override resets display so minWidth has no effect at desktop
       >
-        {SOCIAL_VIDEOS.map((video) => (
+        {featured.map((video) => (
           <div
             key={video.id}
             className="flex-shrink-0 w-[260px] snap-start lg:w-auto lg:flex-shrink"

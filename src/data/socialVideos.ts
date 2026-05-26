@@ -11,6 +11,7 @@ export interface SocialVideo {
   videoSrc?: string       // local MP4 — if present, plays on-site
   thumbnail?: string
   thumbnailAlt?: string
+  thumbnailStatus: 'matched' | 'uncertain' | 'missing'
   permissionStatus: 'approved' | 'needs-permission'
 }
 
@@ -28,6 +29,7 @@ export const SOCIAL_VIDEOS: SocialVideo[] = [
     videoSrc: '/videos/manka-cafe-tingtingkoko.mp4',
     thumbnail: '/images/social-video/manka-cafe-tingtingkoko-thumbnail.jpg',
     thumbnailAlt: 'TikTok thumbnail showing 3D bear foam latte and 2D print latte at Manka Cafe — anime cafe Sunnybank',
+    thumbnailStatus: 'matched',
     permissionStatus: 'needs-permission',
   },
   {
@@ -43,6 +45,7 @@ export const SOCIAL_VIDEOS: SocialVideo[] = [
     videoSrc: '/videos/manka-cafe-instagram-reel.mp4',
     thumbnail: '/images/social-video/manka-cafe-3d-foam-latte-art-bear.jpg',
     thumbnailAlt: '3D bear milk foam latte art at Manka Cafe in Sunnybank',
+    thumbnailStatus: 'uncertain',
     permissionStatus: 'needs-permission',
   },
   {
@@ -58,6 +61,7 @@ export const SOCIAL_VIDEOS: SocialVideo[] = [
     videoSrc: '/videos/manka-cafe-places-in-brisbane.mp4',
     thumbnail: '/images/social-video/manka-cafe-places-in-brisbane-thumbnail.jpg',
     thumbnailAlt: 'Beef curry with rice and sides at Manka Cafe Market Square Sunnybank',
+    thumbnailStatus: 'matched',
     permissionStatus: 'needs-permission',
   },
   {
@@ -73,6 +77,7 @@ export const SOCIAL_VIDEOS: SocialVideo[] = [
     // No local MP4 for this reel — falls back to embed/thumbnail card
     thumbnail: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg',
     thumbnailAlt: 'Anime character 2D print latte at Manka Cafe — anime and manga cafe in Brisbane',
+    thumbnailStatus: 'uncertain',
     permissionStatus: 'needs-permission',
   },
 ]
