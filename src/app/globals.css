@@ -207,6 +207,22 @@
   .text-balance   { text-wrap: balance; }
   .pb-safe        { padding-bottom: var(--safe-bottom); }
   .scroll-mt-nav  { scroll-margin-top: 5rem; }
+
+  /* Hide scrollbar while preserving scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ─── Mobile main content padding (reserves space for sticky CTA) */
+@media (max-width: 1023px) {
+  main {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* ─── Nav underline indicator ────────────────────────────────── */
@@ -256,13 +272,17 @@
   @apply hidden;
 }
 
-/* ─── Mobile sticky bar slide-in ────────────────────────────── */
+/* ─── Mobile sticky bar fade-in (opacity avoids iOS Safari fixed-element flicker) */
 .sticky-cta-bar {
-  transform: translateY(100%);
-  transition: transform var(--dur-slow) var(--ease-out-expo);
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 300ms ease, transform 300ms ease;
 }
 .sticky-cta-bar.is-visible {
-  transform: translateY(0);
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 
 /* ─── Section heading underline accent ───────────────────────── */
