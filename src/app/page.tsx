@@ -57,6 +57,7 @@ const localBusinessSchema = {
 const REVIEWS = [
   { quote: 'My favourite cafe in Brisbane.', source: 'Google review' },
   { quote: 'Calming atmosphere with Ghibli piano playing.', source: 'Google review' },
+  { quote: 'I ended up reading a whole volume of manga.', source: 'Google review' },
   { quote: 'A hidden gem in the busy area of Market Square.', source: 'Google review' },
 ]
 
@@ -91,8 +92,8 @@ const ORDER_ITEMS = [
   {
     name: '3D or 2D Latte Art',
     desc: 'Sculpted foam characters or hand-drawn designs on your latte. Ask in-store for the day\'s options.',
-    image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg',
-    alt: '3D bear milk foam latte art at Manka Cafe in Sunnybank — a sculpted white bear sitting in a warm drink on a ceramic saucer',
+    image: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg',
+    alt: '2D foam latte art at Manka Cafe in Sunnybank',
   },
   {
     name: 'Hong Kong Style French Toast',
@@ -196,8 +197,8 @@ export default function HomePage() {
       </section>
 
       {/* ─── Manka Through Their Eyes (video) ────────────────────── */}
-      <section className="bg-parchment py-20 lg:py-28 overflow-hidden">
-        <div className="container mb-10">
+      <section className="bg-parchment py-12 lg:py-16 overflow-hidden">
+        <div className="container mb-8">
           <p className="text-xs tracking-widest uppercase text-stone mb-4" data-reveal>
             Featured by creators
           </p>
@@ -218,17 +219,32 @@ export default function HomePage() {
       </section>
 
       {/* ─── Review strip ─────────────────────────────────────── */}
-      <section className="bg-cream py-12 lg:py-16">
+      <section className="bg-cream border-y border-parchment py-10 lg:py-14">
         <div className="container">
-          <div className="grid sm:grid-cols-3 gap-8 lg:gap-14">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7" data-reveal>
+            <div>
+              <p className="text-xs tracking-widest uppercase text-stone mb-2">Real visits</p>
+              <h2 className="font-display font-semibold text-ink text-xl sm:text-2xl leading-tight">
+                What people mention again and again
+              </h2>
+            </div>
+            <p className="text-stone text-sm max-w-[36ch] sm:text-right leading-relaxed flex-shrink-0">
+              Calm music, manga shelves, latte art<br className="hidden sm:block" /> and food worth coming back for.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {REVIEWS.map((r, i) => (
               <blockquote
                 key={i}
+                className="bg-parchment rounded-xl px-5 py-4"
                 data-reveal
-                data-delay={String(i + 1) as '1' | '2' | '3'}
+                data-delay={String((i % 4) + 1) as '1' | '2' | '3' | '4'}
               >
-                <p className="review-quote text-lg sm:text-xl">&ldquo;{r.quote}&rdquo;</p>
-                <footer className="review-source mt-3">{r.source}</footer>
+                <p className="font-display italic text-ink text-base leading-snug mb-3">
+                  &ldquo;{r.quote}&rdquo;
+                </p>
+                <footer className="text-[10px] tracking-widest uppercase text-stone/70">{r.source}</footer>
               </blockquote>
             ))}
           </div>
