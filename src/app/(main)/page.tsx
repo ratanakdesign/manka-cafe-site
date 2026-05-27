@@ -6,8 +6,8 @@ import OpeningStatus from '@/components/OpeningStatus'
 import SocialVideoCarousel from '@/components/SocialVideoCarousel'
 import { HOURS } from '@/data/hours'
 import type { SocialVideo } from '@/data/socialVideos'
-import { client } from '../../sanity/lib/client'
-import { urlFor } from '../../sanity/lib/image'
+import { client } from '../../../sanity/lib/client'
+import { urlFor } from '../../../sanity/lib/image'
 
 export const revalidate = 60
 
