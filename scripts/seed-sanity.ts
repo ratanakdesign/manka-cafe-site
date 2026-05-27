@@ -1,54 +1,61 @@
 /**
- * Seed script — populates the Sanity dataset with all hardcoded site data.
+ * MANUAL SEED SCRIPT — run once to populate Sanity with hardcoded site data.
+ *
+ * WARNING: This script performs write mutations against the live Sanity dataset.
+ *          Run only intentionally, never as part of a build or CI pipeline.
+ *          It is NOT imported by any app code.
+ *
+ * Prerequisites:
+ *   - SANITY_WRITE_TOKEN set in .env.local (write-access token from manage.sanity.io)
+ *   - NEXT_PUBLIC_SANITY_PROJECT_ID and NEXT_PUBLIC_SANITY_DATASET set in .env.local
+ *
+ * Usage:
+ *   npx tsx scripts/seed-sanity.ts
  *
  * Content types seeded:
- *   menuItem       — full menu catalogue
- *   openingHours   — singleton settings document (weekly schedule)
- *   faq            — frequently asked questions
- *   socialVideo    — social/creator video embeds
- *   review         — homepage review quotes
- *   featureCard    — "Four reasons Manka is worth finding" cards
- *
- * Run:
- *   npx tsx scripts/seed-sanity.ts
+ *   menuItem      — full menu catalogue (37 items across 9 categories)
+ *   openingHours  — weekly schedule singleton
+ *   faq           — 14 frequently asked questions
+ *   socialVideo   — 4 creator/social video embeds
+ *   review        — 4 homepage review quotes
+ *   featureCard   — 4 "why Manka" homepage feature cards
  */
 
-import { createClient } from '@sanity/client'
+import { createClient, type IdentifiedSanityDocumentStub } from '@sanity/client'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as dotenv from 'dotenv'
 
-// Load .env.local
+// ─── Environment ─────────────────────────────────────────────────────────────
+
 const envPath = path.resolve(process.cwd(), '.env.local')
 if (fs.existsSync(envPath)) {
-  dotenv.parse(fs.readFileSync(envPath)).valueOf
-
-  const envVars = dotenv.parse(fs.readFileSync(envPath))
-  for (const [key, value] of Object.entries(envVars)) {
+  const parsed = dotenv.parse(fs.readFileSync(envPath))
+  for (const [key, value] of Object.entries(parsed)) {
     process.env[key] = value
   }
 }
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-const token = process.env.SANITY_API_READ_TOKEN
+const token = process.env.SANITY_WRITE_TOKEN
 
-if (!projectId || !dataset || !token) {
-  console.error('Missing required env vars. Check .env.local')
+if (!projectId || !dataset) {
+  console.error('Missing NEXT_PUBLIC_SANITY_PROJECT_ID or NEXT_PUBLIC_SANITY_DATASET in .env.local')
+  process.exit(1)
+}
+if (!token) {
+  console.error('Missing SANITY_WRITE_TOKEN in .env.local')
   process.exit(1)
 }
 
-const client = createClient({
-  projectId,
-  dataset,
-  apiVersion: '2024-01-01',
-  token,
-  useCdn: false,
-})
+console.log(`Connecting to Sanity project ${projectId} / ${dataset}`)
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+const client = createClient({ projectId, dataset, apiVersion: '2024-01-01', useCdn: false, token })
 
-const MENU_ITEMS = [
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const MENU_ITEMS: IdentifiedSanityDocumentStub[] = [
   // Popular at Manka
   { _type: 'menuItem', _id: 'menu-popular-latte-art', name: '3D or 2D Latte Art', category: 'Popular at Manka', description: 'Sculpted milk foam characters or hand-drawn designs on your latte. Made at the counter, different every time. The reason most people first visit Manka.', note: 'Dine-in only. Ask in-store for current designs and pricing.', image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg', imageAlt: '3D bear milk foam latte art at Manka Cafe in Sunnybank', featured: true },
   { _type: 'menuItem', _id: 'menu-popular-hk-toast', name: 'Hong Kong Style French Toast', category: 'Popular at Manka', description: 'Toast with egg, butter, maple syrup and peanut. A Hong Kong café classic — the most-reordered item.', price: '$15', note: 'Contains nuts.', image: '/images/menu/manka-cafe-hong-kong-french-toast-butter.jpg', imageAlt: 'Hong Kong-style French toast at Manka Cafe — golden toast with peanut butter and maple syrup', featured: true },
@@ -105,7 +112,7 @@ const MENU_ITEMS = [
   { _type: 'menuItem', _id: 'menu-pasta-chicken-mushroom', name: 'Chicken and Mushroom Pasta', category: 'Pastas', description: 'Tender chicken and mushrooms in a rich pasta dish.', price: '$29.77' },
 ]
 
-const OPENING_HOURS = {
+const OPENING_HOURS: IdentifiedSanityDocumentStub = {
   _type: 'openingHours',
   _id: 'opening-hours-singleton',
   schedule: [
@@ -119,7 +126,7 @@ const OPENING_HOURS = {
   ],
 }
 
-const FAQS = [
+const FAQS: IdentifiedSanityDocumentStub[] = [
   { _type: 'faq', _id: 'faq-location', question: 'Where is Manka Cafe located?', answer: "Manka Cafe is located at Shop 58 Level 1, 341 Mains Rd, Sunnybank QLD 4109, above Yuen's Market in Market Square. Take the escalator or stairs up to Level 1 and look for the cafe.", category: 'Location & Hours' },
   { _type: 'faq', _id: 'faq-anime', question: 'Is Manka Cafe an anime cafe?', answer: 'Yes. Manka Cafe is an anime-inspired cafe with manga shelves, anime artwork, customer drawings on the walls and custom character latte art. The atmosphere is designed to be cosy and relaxed rather than loud or convention-style.', category: 'Menu & Food' },
   { _type: 'faq', _id: 'faq-latte-art', question: 'Does Manka Cafe offer custom latte art?', answer: 'Yes. Manka Cafe offers 2D and 3D milk foam latte art, including custom character and photo print options, subject to availability. For custom orders, please DM us on Instagram before visiting. Note: custom latte art is available on warm drinks only.', category: 'Latte Art' },
@@ -136,155 +143,40 @@ const FAQS = [
   { _type: 'faq', _id: 'faq-latte-art-takeaway', question: 'Can I get latte art to take away?', answer: 'Latte art is primarily designed for dine-in so you can enjoy it at its best. Some designs may be available as takeaway — please ask our team on the day. 3D foam art in particular is best enjoyed in-house.', category: 'Latte Art' },
 ]
 
-const SOCIAL_VIDEOS = [
-  {
-    _type: 'socialVideo',
-    _id: 'video-instagram-reel-2',
-    platform: 'instagram',
-    embedId: 'C5cXucxP3CW',
-    creatorHandle: '@manka_cafe',
-    creatorName: 'Instagram creator',
-    title: 'Manka Cafe — places in Brisbane',
-    label: 'Creator visit',
-    description: 'Food and atmosphere from a creator visit to Manka Cafe, Sunnybank.',
-    url: 'https://www.instagram.com/reels/C5cXucxP3CW/',
-    videoSrc: '/videos/manka-cafe-places-in-brisbane.mp4',
-    thumbnail: '/images/social-video/manka-cafe-places-in-brisbane-thumbnail.jpg',
-    thumbnailAlt: 'Beef curry with rice and sides at Manka Cafe Market Square Sunnybank',
-    thumbnailStatus: 'matched',
-    permissionStatus: 'needs-permission',
-    sortOrder: 1,
-  },
-  {
-    _type: 'socialVideo',
-    _id: 'video-tiktok-tingtingkoko',
-    platform: 'tiktok',
-    embedId: '7498636543855168775',
-    creatorHandle: '@tingtingkoko',
-    creatorName: 'tingtingkoko',
-    title: '2D & 3D foam art anime cafe Sunnybank',
-    label: 'TikTok feature',
-    description: 'Latte art, food and the anime cafe atmosphere upstairs in Market Square.',
-    url: 'https://www.tiktok.com/@tingtingkoko/video/7498636543855168775',
-    videoSrc: '/videos/manka-cafe-tingtingkoko.mp4',
-    thumbnail: '/images/social-video/manka-cafe-tingtingkoko-thumbnail.jpg',
-    thumbnailAlt: 'TikTok thumbnail showing 3D bear foam latte and 2D print latte at Manka Cafe — anime cafe Sunnybank',
-    thumbnailStatus: 'matched',
-    permissionStatus: 'needs-permission',
-    sortOrder: 2,
-  },
-  {
-    _type: 'socialVideo',
-    _id: 'video-instagram-reel-1',
-    platform: 'instagram',
-    embedId: 'C4R4OBCPmrI',
-    creatorHandle: '@manka_cafe',
-    creatorName: 'Instagram creator',
-    title: 'Manka Cafe featured reel',
-    label: 'Instagram Reel',
-    description: 'A short look at the latte art and cosy anime cafe space at Market Square.',
-    url: 'https://www.instagram.com/reels/C4R4OBCPmrI/',
-    videoSrc: '/videos/manka-cafe-instagram-reel.mp4',
-    thumbnail: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg',
-    thumbnailAlt: 'Anime character 2D print latte at Manka Cafe in Sunnybank',
-    thumbnailStatus: 'matched',
-    permissionStatus: 'needs-permission',
-    sortOrder: 3,
-  },
-  {
-    _type: 'socialVideo',
-    _id: 'video-instagram-reel-3',
-    platform: 'instagram',
-    embedId: 'C8lN0HOPjaa',
-    creatorHandle: '@manka_cafe',
-    creatorName: 'Instagram creator',
-    title: 'Anime & manga cafe in Brisbane',
-    label: 'Latte art feature',
-    description: 'Anime character 2D print latte from an Instagram feature of Manka Cafe.',
-    url: 'https://www.instagram.com/reel/C8lN0HOPjaa/',
-    thumbnail: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg',
-    thumbnailAlt: 'Anime character 2D print latte at Manka Cafe — anime and manga cafe in Brisbane',
-    thumbnailStatus: 'uncertain',
-    permissionStatus: 'needs-permission',
-    sortOrder: 4,
-  },
+const SOCIAL_VIDEOS: IdentifiedSanityDocumentStub[] = [
+  { _type: 'socialVideo', _id: 'video-instagram-reel-2', platform: 'instagram', embedId: 'C5cXucxP3CW', creatorHandle: '@manka_cafe', creatorName: 'Instagram creator', title: 'Manka Cafe — places in Brisbane', label: 'Creator visit', description: 'Food and atmosphere from a creator visit to Manka Cafe, Sunnybank.', url: 'https://www.instagram.com/reels/C5cXucxP3CW/', videoSrc: '/videos/manka-cafe-places-in-brisbane.mp4', thumbnail: '/images/social-video/manka-cafe-places-in-brisbane-thumbnail.jpg', thumbnailAlt: 'Beef curry with rice and sides at Manka Cafe Market Square Sunnybank', thumbnailStatus: 'matched', permissionStatus: 'needs-permission', sortOrder: 1 },
+  { _type: 'socialVideo', _id: 'video-tiktok-tingtingkoko', platform: 'tiktok', embedId: '7498636543855168775', creatorHandle: '@tingtingkoko', creatorName: 'tingtingkoko', title: '2D & 3D foam art anime cafe Sunnybank', label: 'TikTok feature', description: 'Latte art, food and the anime cafe atmosphere upstairs in Market Square.', url: 'https://www.tiktok.com/@tingtingkoko/video/7498636543855168775', videoSrc: '/videos/manka-cafe-tingtingkoko.mp4', thumbnail: '/images/social-video/manka-cafe-tingtingkoko-thumbnail.jpg', thumbnailAlt: 'TikTok thumbnail showing 3D bear foam latte and 2D print latte at Manka Cafe — anime cafe Sunnybank', thumbnailStatus: 'matched', permissionStatus: 'needs-permission', sortOrder: 2 },
+  { _type: 'socialVideo', _id: 'video-instagram-reel-1', platform: 'instagram', embedId: 'C4R4OBCPmrI', creatorHandle: '@manka_cafe', creatorName: 'Instagram creator', title: 'Manka Cafe featured reel', label: 'Instagram Reel', description: 'A short look at the latte art and cosy anime cafe space at Market Square.', url: 'https://www.instagram.com/reels/C4R4OBCPmrI/', videoSrc: '/videos/manka-cafe-instagram-reel.mp4', thumbnail: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg', thumbnailAlt: 'Anime character 2D print latte at Manka Cafe in Sunnybank', thumbnailStatus: 'matched', permissionStatus: 'needs-permission', sortOrder: 3 },
+  { _type: 'socialVideo', _id: 'video-instagram-reel-3', platform: 'instagram', embedId: 'C8lN0HOPjaa', creatorHandle: '@manka_cafe', creatorName: 'Instagram creator', title: 'Anime & manga cafe in Brisbane', label: 'Latte art feature', description: 'Anime character 2D print latte from an Instagram feature of Manka Cafe.', url: 'https://www.instagram.com/reel/C8lN0HOPjaa/', thumbnail: '/images/social-video/manka-cafe-instagram-reel-thumbnail.jpg', thumbnailAlt: 'Anime character 2D print latte at Manka Cafe — anime and manga cafe in Brisbane', thumbnailStatus: 'uncertain', permissionStatus: 'needs-permission', sortOrder: 4 },
 ]
 
-const REVIEWS = [
+const REVIEWS: IdentifiedSanityDocumentStub[] = [
   { _type: 'review', _id: 'review-favourite-cafe', quote: 'My favourite cafe in Brisbane.', source: 'Google review', sortOrder: 1 },
   { _type: 'review', _id: 'review-ghibli-piano', quote: 'Calming atmosphere with Ghibli piano playing.', source: 'Google review', sortOrder: 2 },
   { _type: 'review', _id: 'review-manga-volume', quote: 'I ended up reading a whole volume of manga.', source: 'Google review', sortOrder: 3 },
   { _type: 'review', _id: 'review-hidden-gem', quote: 'A hidden gem in the busy area of Market Square.', source: 'Google review', sortOrder: 4 },
 ]
 
-const FEATURE_CARDS = [
-  {
-    _type: 'featureCard',
-    _id: 'feature-latte-art',
-    heading: 'Custom latte art at the counter',
-    body: 'Sculpted 3D foam characters or hand-drawn designs — different every time. The thing people talk about most.',
-    image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg',
-    imageAlt: '3D bear milk foam latte art at Manka Cafe in Sunnybank',
-    sortOrder: 1,
-  },
-  {
-    _type: 'featureCard',
-    _id: 'feature-manga',
-    heading: 'Manga you can actually read',
-    body: 'The shelves are there to be used. Pick something familiar, settle in, no rush.',
-    image: '/images/inside-manka/manka-cafe-manga-bookshelf-mural-detail.webp',
-    imageAlt: 'Manga bookshelf at Manka Cafe with anime mural behind, Sunnybank',
-    sortOrder: 2,
-  },
-  {
-    _type: 'featureCard',
-    _id: 'feature-hk-food',
-    heading: 'Hong Kong-style comfort food',
-    body: 'Thick-cut French toast with peanut butter and golden syrup — the most-reordered item on the menu.',
-    image: '/images/menu/manka-cafe-hong-kong-french-toast-butter.jpg',
-    imageAlt: 'Hong Kong-style French toast at Manka Cafe, Sunnybank',
-    sortOrder: 3,
-  },
-  {
-    _type: 'featureCard',
-    _id: 'feature-quiet-space',
-    heading: 'A quiet space upstairs',
-    body: "Small, owner-run, hidden above the Market Square rush. Soft Ghibli piano. Walls covered in drawings.",
-    image: '/images/inside-manka/manka-cafe-customer-art-wall-corner.webp',
-    imageAlt: 'Customer art wall at Manka Cafe — hand-drawn anime characters by visitors',
-    sortOrder: 4,
-  },
+const FEATURE_CARDS: IdentifiedSanityDocumentStub[] = [
+  { _type: 'featureCard', _id: 'feature-latte-art', heading: 'Custom latte art at the counter', body: 'Sculpted 3D foam characters or hand-drawn designs — different every time. The thing people talk about most.', image: '/images/latte-art/manka-cafe-3d-foam-latte-art-bear.jpg', imageAlt: '3D bear milk foam latte art at Manka Cafe in Sunnybank', sortOrder: 1 },
+  { _type: 'featureCard', _id: 'feature-manga', heading: 'Manga you can actually read', body: 'The shelves are there to be used. Pick something familiar, settle in, no rush.', image: '/images/inside-manka/manka-cafe-manga-bookshelf-mural-detail.webp', imageAlt: 'Manga bookshelf at Manka Cafe with anime mural behind, Sunnybank', sortOrder: 2 },
+  { _type: 'featureCard', _id: 'feature-hk-food', heading: 'Hong Kong-style comfort food', body: 'Thick-cut French toast with peanut butter and golden syrup — the most-reordered item on the menu.', image: '/images/menu/manka-cafe-hong-kong-french-toast-butter.jpg', imageAlt: 'Hong Kong-style French toast at Manka Cafe, Sunnybank', sortOrder: 3 },
+  { _type: 'featureCard', _id: 'feature-quiet-space', heading: 'A quiet space upstairs', body: 'Small, owner-run, hidden above the Market Square rush. Soft Ghibli piano. Walls covered in drawings.', image: '/images/inside-manka/manka-cafe-customer-art-wall-corner.webp', imageAlt: 'Customer art wall at Manka Cafe — hand-drawn anime characters by visitors', sortOrder: 4 },
 ]
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-async function upsert(doc: Record<string, unknown>) {
-  const { _id, ...rest } = doc
-  try {
-    await client.createOrReplace({ _id: _id as string, ...rest })
-    return true
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err)
-    // Attempt createIfNotExists as fallback for schema-validated datasets
-    try {
-      await client.createIfNotExists({ _id: _id as string, ...rest })
-      return true
-    } catch {
-      throw new Error(`Failed to upsert ${_id}: ${msg}`)
-    }
-  }
-}
-
-async function seedCollection(label: string, docs: Record<string, unknown>[]) {
+async function seedCollection(label: string, docs: IdentifiedSanityDocumentStub[]) {
   console.log(`\nSeeding ${label} (${docs.length} docs)…`)
   let ok = 0
   for (const doc of docs) {
     try {
-      await upsert(doc)
+      await client.createOrReplace(doc)
       ok++
       process.stdout.write('.')
     } catch (err) {
-      console.error(`\n  ✗ ${(doc as { _id?: string })._id}: ${err}`)
+      const e = err as { statusCode?: number; message?: string; responseBody?: string }
+      console.error(`\n  ✗ ${doc._id}: [${e.statusCode}] ${e.message}`)
     }
   }
   console.log(`\n  ✓ ${ok}/${docs.length} written`)
@@ -293,16 +185,13 @@ async function seedCollection(label: string, docs: Record<string, unknown>[]) {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\nConnecting to Sanity project ${projectId} / ${dataset}`)
-
-  await seedCollection('menuItems', MENU_ITEMS as unknown as Record<string, unknown>[])
-  await seedCollection('openingHours', [OPENING_HOURS as unknown as Record<string, unknown>])
-  await seedCollection('faqs', FAQS as unknown as Record<string, unknown>[])
-  await seedCollection('socialVideos', SOCIAL_VIDEOS as unknown as Record<string, unknown>[])
-  await seedCollection('reviews', REVIEWS as unknown as Record<string, unknown>[])
-  await seedCollection('featureCards', FEATURE_CARDS as unknown as Record<string, unknown>[])
-
-  console.log('\nSeed complete.\n')
+  await seedCollection('menuItems', MENU_ITEMS)
+  await seedCollection('openingHours', [OPENING_HOURS])
+  await seedCollection('faqs', FAQS)
+  await seedCollection('socialVideos', SOCIAL_VIDEOS)
+  await seedCollection('reviews', REVIEWS)
+  await seedCollection('featureCards', FEATURE_CARDS)
+  console.log('\nSeed complete.')
 }
 
 main().catch((err) => {

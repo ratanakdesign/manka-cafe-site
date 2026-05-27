@@ -95,7 +95,7 @@ export default function Footer() {
             <address className="not-italic text-sm text-cream/50 mb-5 leading-relaxed">
               Shop 58 Level 1<br/>
               341 Mains Rd, Sunnybank QLD 4109<br/>
-              <span className="text-cream/30 text-xs">Above Yuen's Market, Market Square</span>
+              <span className="text-cream/30 text-xs">Above Yuen&apos;s Market, Market Square</span>
             </address>
             <ul className="space-y-1.5">
               {HOURS.map((d) => (
