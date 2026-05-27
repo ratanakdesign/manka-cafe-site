@@ -143,8 +143,8 @@ function VideoCard({ video }: { video: SocialVideo }) {
   )
 }
 
-export default function SocialVideoCarousel() {
-  const featured = SOCIAL_VIDEOS.slice(0, 3)
+export default function SocialVideoCarousel({ videos }: { videos?: SocialVideo[] }) {
+  const featured = (videos ?? SOCIAL_VIDEOS).slice(0, 3)
 
   return (
     // Mobile: horizontal snap scroll; desktop: 3-column grid, no scroll

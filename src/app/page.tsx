@@ -5,6 +5,11 @@ import JsonLd from '@/components/JsonLd'
 import OpeningStatus from '@/components/OpeningStatus'
 import SocialVideoCarousel from '@/components/SocialVideoCarousel'
 import { HOURS } from '@/data/hours'
+import type { SocialVideo } from '@/data/socialVideos'
+import { client } from '../../sanity/lib/client'
+import { urlFor } from '../../sanity/lib/image'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Manka Cafe Sunnybank | Anime Cafe, Latte Art & Matcha Brisbane',
@@ -18,50 +23,20 @@ export const metadata: Metadata = {
   },
 }
 
-const MAPS     = 'https://maps.google.com/?q=Shop+58+Level+1+341+Mains+Rd+Sunnybank+QLD+4109'
-const UBEREATS = 'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ'
-const INSTAGRAM = 'https://www.instagram.com/manka_cafe/'
+// ─── Fallback constants ──────────────────────────────────────────────────────
 
-const localBusinessSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'CafeOrCoffeeShop',
-  name: 'Manka Cafe 滿華',
-  description:
-    'A quiet anime cafe hidden upstairs in Market Square, Sunnybank. Custom 2D and 3D milk foam latte art, matcha drinks, Hong Kong-style French toast, manga shelves and a cosy owner-run atmosphere.',
-  url: 'https://mankacafe.com.au',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Shop 58 Level 1, 341 Mains Rd',
-    addressLocality: 'Sunnybank',
-    addressRegion: 'QLD',
-    postalCode: '4109',
-    addressCountry: 'AU',
-  },
-  geo: { '@type': 'GeoCoordinates', latitude: -27.5846, longitude: 153.0511 },
-  servesCuisine: ['Cafe', 'Japanese', 'Hong Kong'],
-  priceRange: '$',
-  hasMenu: 'https://mankacafe.com.au/menu',
-  openingHoursSpecification: HOURS.filter((h) => !h.closed).map((h) => ({
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: `https://schema.org/${h.name}`,
-    opens: h.open,
-    closes: h.close,
-  })),
-  sameAs: [
-    'https://www.instagram.com/manka_cafe/',
-    'https://www.facebook.com/p/Manka-Cafe-%E6%BB%BF%E8%8F%AF-61557450650306/',
-    'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ',
-  ],
-}
+const MAPS_FALLBACK     = 'https://maps.google.com/?q=Shop+58+Level+1+341+Mains+Rd+Sunnybank+QLD+4109'
+const UBEREATS_FALLBACK = 'https://www.ubereats.com/au/store/manka-cafe-sunnybank/2Lo97zt2QQeAtQ8itfl0WQ'
+const INSTAGRAM_FALLBACK = 'https://www.instagram.com/manka_cafe/'
+const FACEBOOK_FALLBACK  = 'https://www.facebook.com/p/Manka-Cafe-%E6%BB%BF%E8%8F%AF-61557450650306/'
 
-const REVIEWS = [
+const REVIEWS_FALLBACK = [
   { quote: 'My favourite cafe in Brisbane.', source: 'Google review' },
   { quote: 'Calming atmosphere with Ghibli piano playing.', source: 'Google review' },
   { quote: 'I ended up reading a whole volume of manga.', source: 'Google review' },
   { quote: 'A hidden gem in the busy area of Market Square.', source: 'Google review' },
 ]
 
-// Four feature cards — rendered as a 2×2 photo grid with text overlays
 const FEATURES = [
   {
     heading: 'Custom latte art at the counter',
@@ -89,14 +64,16 @@ const FEATURES = [
   },
 ]
 
-const ORDER_ITEMS = [
+const ORDER_ITEMS_FALLBACK = [
   {
+    id: 'latte-art',
     name: '3D or 2D Latte Art',
-    desc: 'Sculpted foam characters or hand-drawn designs. Ask in-store for today\'s options.',
+    desc: "Sculpted foam characters or hand-drawn designs. Ask in-store for today's options.",
     image: '/images/latte-art/manka-cafe-2d-foam-latte-art.png',
     alt: '2D foam latte art at Manka Cafe in Sunnybank',
   },
   {
+    id: 'hk-toast',
     name: 'Hong Kong Style French Toast',
     desc: 'Toast with egg, butter, maple syrup and peanut. The most-reordered item.',
     price: '$15',
@@ -104,6 +81,7 @@ const ORDER_ITEMS = [
     alt: 'Hong Kong-style French toast at Manka Cafe — golden toast with peanut butter and maple syrup',
   },
   {
+    id: 'chicken-avo',
     name: 'Chicken, Cheese & Avocado Sandwich',
     desc: 'Served with mayonnaise. No. 1 most-liked item on Uber Eats.',
     price: '$15',
@@ -111,12 +89,14 @@ const ORDER_ITEMS = [
     alt: 'Packaged sandwich at Manka Cafe, Sunnybank',
   },
   {
+    id: 'matcha',
     name: 'Iced Matcha Latte',
     desc: 'Strong matcha flavour, frequently praised in reviews. Ask in-store for availability.',
     image: '/images/menu/manka-cafe-matcha.png',
     alt: 'Iced matcha latte at Manka Cafe, Sunnybank',
   },
   {
+    id: 'chicken-tender',
     name: 'Fried Chicken Tender Set',
     desc: 'Crispy tenders — original or spicy. With fries and fresh vegetables.',
     price: '$30.30',
@@ -124,6 +104,7 @@ const ORDER_ITEMS = [
     alt: 'Fried chicken tenders with chips and salad at Manka Cafe, Sunnybank',
   },
   {
+    id: 'big-breakfast',
     name: 'Big Breakfast',
     desc: 'Toast, scrambled eggs, bacon, beef sausage, tomato beans and ice cream.',
     price: '$29.77',
@@ -132,7 +113,282 @@ const ORDER_ITEMS = [
   },
 ]
 
-export default function HomePage() {
+const LATTE_ART_FALLBACK = [
+  { num: '01', name: '3D Milk Foam Art', desc: 'A sculpted character on top of your latte. Designs change daily — ask in-store.' },
+  { num: '02', name: '2D Drawn Latte',   desc: 'Hand-poured directly onto your drink. Available most days.' },
+  { num: '03', name: '2D Print Art',     desc: 'A character printed onto milk foam. Choose from the in-store collection.' },
+  { num: '04', name: 'Custom Photo Print', desc: 'Your own reference printed onto your latte. DM on Instagram before visiting.' },
+]
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface SanityImageRef {
+  _type: 'image'
+  asset: { _ref: string; _type: 'reference' }
+  hotspot?: { x: number; y: number }
+}
+
+interface SiteSettings {
+  heroHeadline?: string
+  heroDescription?: string
+  heroImage?: SanityImageRef
+  address?: string
+  shopNumber?: string
+  googleMapsUrl?: string
+  uberEatsUrl?: string
+  instagramUrl?: string
+  facebookUrl?: string
+}
+
+interface SanityMenuItem {
+  _id: string
+  name: string
+  price?: number
+  description?: string
+  image?: SanityImageRef
+}
+
+interface SanityReview {
+  _id: string
+  quote: string
+  source?: string
+}
+
+interface SanityLatteArtType {
+  _id: string
+  title?: string
+  description?: string
+  order?: number
+}
+
+interface SanityCreatorVideo {
+  _id: string
+  title?: string
+  description?: string
+  platform?: string
+  label?: string
+  videoUrl?: string
+  originalUrl?: string
+  order?: number
+}
+
+interface SanityOpeningHours {
+  _id: string
+  day: string
+  openTime?: string
+  closeTime?: string
+  isClosed?: boolean
+  order?: number
+}
+
+interface HomePageData {
+  siteSettings: SiteSettings | null
+  featuredMenuItems: SanityMenuItem[]
+  reviews: SanityReview[]
+  latteArtTypes: SanityLatteArtType[]
+  creatorVideos: SanityCreatorVideo[]
+  openingHours: SanityOpeningHours[]
+}
+
+// ─── GROQ query ───────────────────────────────────────────────────────────────
+
+const homePageQuery = `{
+  "siteSettings": *[_type == "siteSettings"][0] {
+    heroHeadline,
+    heroDescription,
+    heroImage,
+    address,
+    shopNumber,
+    googleMapsUrl,
+    uberEatsUrl,
+    instagramUrl,
+    facebookUrl
+  },
+  "featuredMenuItems": *[_type == "menuItem" && featured == true] | order(order asc) {
+    _id,
+    name,
+    price,
+    description,
+    image
+  },
+  "reviews": *[_type == "review"] {
+    _id,
+    quote,
+    source
+  },
+  "latteArtTypes": *[_type == "latteArtType"] | order(order asc) {
+    _id,
+    title,
+    description,
+    order
+  },
+  "creatorVideos": *[_type == "creatorVideo"] | order(order asc) {
+    _id,
+    title,
+    description,
+    platform,
+    label,
+    "videoUrl": videoFile.asset->url,
+    originalUrl,
+    order
+  },
+  "openingHours": *[_type == "openingHours"] | order(order asc) {
+    _id,
+    day,
+    openTime,
+    closeTime,
+    isClosed,
+    order
+  }
+}`
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+export default async function HomePage() {
+  // Fetch from Sanity; fall back gracefully if unavailable
+  let data: HomePageData = {
+    siteSettings: null,
+    featuredMenuItems: [],
+    reviews: [],
+    latteArtTypes: [],
+    creatorVideos: [],
+    openingHours: [],
+  }
+  try {
+    data = await client.fetch<HomePageData>(homePageQuery)
+  } catch {
+    // serves static fallbacks below
+  }
+
+  const { siteSettings, featuredMenuItems, reviews, latteArtTypes, creatorVideos, openingHours } = data
+
+  // ── Resolve URLs and links ────────────────────────────────────────────────
+  const mapsUrl     = siteSettings?.googleMapsUrl  ?? MAPS_FALLBACK
+  const uberEatsUrl = siteSettings?.uberEatsUrl    ?? UBEREATS_FALLBACK
+  const instagramUrl = siteSettings?.instagramUrl  ?? INSTAGRAM_FALLBACK
+  const facebookUrl  = siteSettings?.facebookUrl   ?? FACEBOOK_FALLBACK
+  const address     = siteSettings?.address        ?? 'Shop 58 Level 1, 341 Mains Rd, Sunnybank QLD 4109'
+  const shopRef     = siteSettings?.shopNumber     ?? 'Shop 58'
+
+  const heroImageSrc = siteSettings?.heroImage
+    ? urlFor(siteSettings.heroImage).width(1920).height(1080).auto('format').url()
+    : '/images/hero/manka-cafe-full-anime-mural-wide.webp'
+
+  const heroHeadline    = siteSettings?.heroHeadline    ?? 'A quiet anime cafe hidden upstairs in Sunnybank.'
+  const heroDescription = siteSettings?.heroDescription ?? 'Come for the custom latte art. Stay for the manga shelves, hand-drawn walls, soft music and Hong Kong-style comfort food.'
+
+  // ── Reviews ───────────────────────────────────────────────────────────────
+  const displayReviews = reviews.length > 0
+    ? reviews.map((r) => ({ id: r._id, quote: r.quote, source: r.source ?? '' }))
+    : REVIEWS_FALLBACK.map((r, i) => ({ id: String(i), ...r }))
+
+  // ── Featured menu items ───────────────────────────────────────────────────
+  interface DisplayMenuItem {
+    id: string
+    name: string
+    price?: string
+    desc: string
+    imageSrc?: string
+    imageAlt: string
+  }
+
+  const displayMenuItems: DisplayMenuItem[] = featuredMenuItems.length > 0
+    ? featuredMenuItems.map((item) => ({
+        id: item._id,
+        name: item.name,
+        price: item.price != null ? `$${item.price}` : undefined,
+        desc: item.description ?? '',
+        imageSrc: item.image
+          ? urlFor(item.image).width(600).height(450).auto('format').url()
+          : undefined,
+        imageAlt: item.name,
+      }))
+    : ORDER_ITEMS_FALLBACK.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        desc: item.desc,
+        imageSrc: item.image,
+        imageAlt: item.alt,
+      }))
+
+  // ── Latte art types ───────────────────────────────────────────────────────
+  interface DisplayLatteArt {
+    id: string
+    num: string
+    name: string
+    desc: string
+  }
+
+  const displayLatteArt: DisplayLatteArt[] = latteArtTypes.length > 0
+    ? latteArtTypes.map((item, i) => ({
+        id: item._id,
+        num: String(i + 1).padStart(2, '0'),
+        name: item.title ?? '',
+        desc: item.description ?? '',
+      }))
+    : LATTE_ART_FALLBACK.map((item) => ({ id: item.num, ...item }))
+
+  // ── Creator videos ────────────────────────────────────────────────────────
+  const displayVideos: SocialVideo[] | undefined = creatorVideos.length > 0
+    ? creatorVideos.map((v) => ({
+        id: v._id,
+        platform: (v.platform?.toLowerCase() === 'tiktok' ? 'tiktok' : 'instagram') as 'tiktok' | 'instagram',
+        embedId: '',
+        creatorHandle: '',
+        creatorName: '',
+        title: v.title ?? '',
+        label: v.label ?? '',
+        description: v.description ?? '',
+        url: v.originalUrl ?? '',
+        videoSrc: v.videoUrl,
+        thumbnail: undefined,
+        thumbnailAlt: v.title ?? '',
+        thumbnailStatus: 'missing' as const,
+        permissionStatus: 'needs-permission' as const,
+      }))
+    : undefined
+
+  // ── Opening hours for structured data ────────────────────────────────────
+  const schemaHours = openingHours.length > 0
+    ? openingHours
+        .filter((h) => !h.isClosed)
+        .map((h) => ({
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: `https://schema.org/${h.day}`,
+          opens: h.openTime ?? '10:00',
+          closes: h.closeTime ?? '18:30',
+        }))
+    : HOURS.filter((h) => !h.closed).map((h) => ({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: `https://schema.org/${h.name}`,
+        opens: h.open,
+        closes: h.close,
+      }))
+
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CafeOrCoffeeShop',
+    name: 'Manka Cafe 滿華',
+    description:
+      'A quiet anime cafe hidden upstairs in Market Square, Sunnybank. Custom 2D and 3D milk foam latte art, matcha drinks, Hong Kong-style French toast, manga shelves and a cosy owner-run atmosphere.',
+    url: 'https://mankacafe.com.au',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Shop 58 Level 1, 341 Mains Rd',
+      addressLocality: 'Sunnybank',
+      addressRegion: 'QLD',
+      postalCode: '4109',
+      addressCountry: 'AU',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: -27.5846, longitude: 153.0511 },
+    servesCuisine: ['Cafe', 'Japanese', 'Hong Kong'],
+    priceRange: '$',
+    hasMenu: 'https://mankacafe.com.au/menu',
+    openingHoursSpecification: schemaHours,
+    sameAs: [instagramUrl, facebookUrl, uberEatsUrl],
+  }
+
   return (
     <>
       <JsonLd data={localBusinessSchema} />
@@ -140,7 +396,7 @@ export default function HomePage() {
       {/* ─── Hero ─────────────────────────────────────────────── */}
       <section className="relative min-h-[88vh] flex items-end bg-ink">
         <Image
-          src="/images/hero/manka-cafe-full-anime-mural-wide.webp"
+          src={heroImageSrc}
           alt="The anime mural at Manka Cafe, Sunnybank — a large hand-painted wall of Japanese anime characters in warm tones"
           fill
           priority
@@ -160,15 +416,14 @@ export default function HomePage() {
                          leading-[1.05] tracking-tight mb-5 max-w-2xl text-balance"
               data-reveal data-delay="1"
             >
-              A quiet anime cafe hidden upstairs in Sunnybank.
+              {heroHeadline}
             </h1>
 
             <p
               className="text-cream/75 text-base sm:text-lg leading-relaxed mb-8 max-w-[48ch]"
               data-reveal data-delay="2"
             >
-              Come for the custom latte art. Stay for the manga shelves, hand-drawn walls,
-              soft music and Hong Kong-style comfort food.
+              {heroDescription}
             </p>
 
             <div className="flex flex-wrap gap-3" data-reveal data-delay="3">
@@ -183,7 +438,7 @@ export default function HomePage() {
 
             <div className="mt-6" data-reveal data-delay="4">
               <a
-                href={UBEREATS}
+                href={uberEatsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-cream/40 hover:text-cream/70 transition-colors duration-150"
@@ -212,7 +467,7 @@ export default function HomePage() {
           </p>
         </div>
         <div className="container" data-reveal data-delay="3">
-          <SocialVideoCarousel />
+          <SocialVideoCarousel videos={displayVideos} />
         </div>
       </section>
 
@@ -232,9 +487,9 @@ export default function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {REVIEWS.map((r, i) => (
+            {displayReviews.map((r, i) => (
               <blockquote
-                key={i}
+                key={r.id}
                 className="bg-parchment rounded-xl px-4 py-4"
                 data-reveal
                 data-delay={String((i % 4) + 1) as '1' | '2' | '3' | '4'}
@@ -249,7 +504,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── Feature grid (replaces long alternating rows) ────── */}
+      {/* ─── Feature grid ─────────────────────────────────────── */}
       <section className="bg-parchment py-14 lg:py-20">
         <div className="container">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-7" data-reveal>
@@ -282,7 +537,6 @@ export default function HomePage() {
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.04] motion-reduce:transform-none"
                   sizes="(max-width: 640px) 100vw, 50vw"
                 />
-                {/* Dark gradient for text legibility */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
                   <h3 className="font-display font-bold text-cream text-base sm:text-[1.05rem] leading-tight mb-1.5">
@@ -314,22 +568,26 @@ export default function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-            {ORDER_ITEMS.map((item, i) => (
+            {displayMenuItems.map((item, i) => (
               <div
-                key={item.name}
+                key={item.id}
                 className="group"
                 data-reveal
                 data-delay={String((i % 3) + 1) as '1' | '2' | '3'}
               >
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
-                  <Image
-                    src={item.image}
-                    alt={item.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transform-none"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
+                {item.imageSrc ? (
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
+                    <Image
+                      src={item.imageSrc}
+                      alt={item.imageAlt}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transform-none"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-[4/3] rounded-2xl bg-parchment mb-3" />
+                )}
                 <div className="flex items-baseline justify-between gap-3 mb-1">
                   <h3 className="font-display font-semibold text-ink text-sm leading-snug">
                     {item.name}
@@ -365,13 +623,8 @@ export default function HomePage() {
               </p>
 
               <div className="space-y-5" data-reveal data-delay="3">
-                {[
-                  { num: '01', name: '3D Milk Foam Art', desc: 'A sculpted character on top of your latte. Designs change daily — ask in-store.' },
-                  { num: '02', name: '2D Drawn Latte', desc: 'Hand-poured directly onto your drink. Available most days.' },
-                  { num: '03', name: '2D Print Art', desc: 'A character printed onto milk foam. Choose from the in-store collection.' },
-                  { num: '04', name: 'Custom Photo Print', desc: 'Your own reference printed onto your latte. DM on Instagram before visiting.' },
-                ].map((item) => (
-                  <div key={item.num} className="flex gap-5">
+                {displayLatteArt.map((item) => (
+                  <div key={item.id} className="flex gap-5">
                     <span className="font-display text-stone/35 text-xs tabular-nums flex-shrink-0 pt-0.5 w-6">
                       {item.num}
                     </span>
@@ -385,7 +638,7 @@ export default function HomePage() {
 
               <div className="mt-8" data-reveal data-delay="4">
                 <a
-                  href={INSTAGRAM}
+                  href={instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-ghost text-cream/70 hover:text-cream"
@@ -498,14 +751,14 @@ export default function HomePage() {
               </h2>
               <p className="text-stone leading-relaxed mb-7 max-w-[40ch] text-sm" data-reveal data-delay="2">
                 Level 1 of Market Square, 341 Mains Rd, Sunnybank.
-                Take the escalator near the centre entrance, look for Shop 58.
+                Take the escalator near the centre entrance, look for {shopRef}.
               </p>
 
               <div data-reveal data-delay="3">
                 {[
                   { step: '01', text: 'Head to 341 Mains Rd, Market Square, Sunnybank' },
                   { step: '02', text: 'Take the escalator or stairs to Level 1' },
-                  { step: '03', text: 'Find Shop 58 — above Yuen\'s Market' },
+                  { step: '03', text: `Find ${shopRef} — above Yuen's Market` },
                 ].map((w, i, arr) => (
                   <div key={w.step} className={`wayfind-step ${i === arr.length - 1 ? 'pb-0' : ''}`}>
                     <div className="w-9 h-9 rounded-full bg-cream flex items-center justify-center flex-shrink-0">
@@ -517,7 +770,7 @@ export default function HomePage() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-3" data-reveal data-delay="4">
-                <a href={MAPS} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                   Open in Google Maps
                 </a>
                 <Link href="/visit" className="btn btn-outline">Full visit guide</Link>
@@ -536,7 +789,7 @@ export default function HomePage() {
                 />
               </div>
               <address className="not-italic mt-3.5 text-sm text-stone leading-relaxed">
-                Shop 58 Level 1, 341 Mains Rd, Sunnybank QLD 4109<br />
+                {address}<br />
                 <span className="text-stone/50 text-xs">Above Yuen&apos;s Market, Market Square</span>
               </address>
             </div>
