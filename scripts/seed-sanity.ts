@@ -31,14 +31,14 @@ loadEnvLocal()
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
 const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
-const token     = process.env.SANITY_API_READ_TOKEN
+const token     = process.env.SANITY_API_TOKEN ?? process.env.SANITY_API_READ_TOKEN
 
 if (!projectId) {
   console.error('Missing NEXT_PUBLIC_SANITY_PROJECT_ID in .env.local')
   process.exit(1)
 }
 if (!token) {
-  console.error('Missing SANITY_API_READ_TOKEN in .env.local')
+  console.error('Missing SANITY_API_TOKEN or SANITY_API_READ_TOKEN in .env.local')
   process.exit(1)
 }
 
