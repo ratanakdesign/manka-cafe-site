@@ -206,7 +206,7 @@ async function seed() {
   console.log('  ✓ siteSettings')
 
   // Reviews
-  for (const [i, r] of reviews.entries()) {
+  for (const r of reviews) {
     tx.createOrReplace({
       _type: 'review' as const,
       _id:   slugId('review', r.quote.slice(0, 30)),
