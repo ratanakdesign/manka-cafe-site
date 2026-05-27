@@ -1,10 +1,6 @@
 import type { Metadata } from 'next'
 import { Fraunces, DM_Sans } from 'next/font/google'
 import './globals.css'
-import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
-import MobileStickyCTA from '@/components/MobileStickyCTA'
-import RevealInit from '@/components/RevealInit'
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -69,13 +65,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-AU" className={`${fraunces.variable} ${dmSans.variable}`}>
-      <body>
-        <Navigation />
-        <RevealInit />
-        <main>{children}</main>
-        <Footer />
-        <MobileStickyCTA />
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
